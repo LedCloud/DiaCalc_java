@@ -956,7 +956,7 @@ private void printMenu(){
      lblProtMenu = new JLabel("===");
      lblProtMenu.setBorder(brdr);
      lblProtMenu.setHorizontalAlignment(SwingConstants.CENTER);
-     lblProtMenu.setToolTipText("Кооличество белков в еде");
+     lblProtMenu.setToolTipText("Количество белков в еде");
      CharPane.add(lblProtMenu,
              new GridBagConstraints(1,0,1,1,0.8,0, GridBagConstraints.CENTER,
           GridBagConstraints.HORIZONTAL, new Insets(2,1,0,2) , 0, 0));
@@ -1307,7 +1307,10 @@ private void printMenu(){
      }*/
      caloriesInd.setForcast( (int)(100 * ds.getCalories()/user.getCalorLimit()) );
   }
-  
+  /**
+   * Создаем панель коэффициентов
+   * @return 
+   */
  private JPanel createCoefPane(){
      JPanel coefPane = new JPanel();
      GroupLayout layout = new GroupLayout(coefPane);
@@ -1525,29 +1528,32 @@ private void printMenu(){
             layout.createSequentialGroup()//coefs + factorchooser
                 .addGroup(layout.createParallelGroup() //coefs+be
                         .addGroup(layout.createSequentialGroup() //coefs
-                                .addGroup(layout.createParallelGroup(
-                                          GroupLayout.Alignment.CENTER)//k1 k2 k3
-                                        .addGroup(layout.createParallelGroup()
+                                .addGroup(layout.createParallelGroup()//k1 k2 k3
+                                        .addGroup(layout.createParallelGroup(
+                                        GroupLayout.Alignment.CENTER)
                                                 .addComponent(lblK1)
                                                 .addComponent(fldK1)
                                         )
-                                        .addGroup(layout.createParallelGroup()
+                                        .addGroup(layout.createParallelGroup(
+                                        GroupLayout.Alignment.CENTER)
                                                 .addComponent(lblK2)
                                                 .addComponent(fldK2)
                                         )
-                                        .addGroup(layout.createParallelGroup()
+                                        .addGroup(layout.createParallelGroup(
+                                        GroupLayout.Alignment.CENTER)
                                                 .addComponent(lblK3)
                                                 .addComponent(fldK3)
                                         )
                                 )
                                 .addGap(settings.getIn().getSizedValue(5))
-                                .addGroup(layout.createParallelGroup(
-                                          GroupLayout.Alignment.CENTER)//sh1 sh2
-                                        .addGroup(layout.createParallelGroup()
+                                .addGroup(layout.createParallelGroup()//sh1 sh2
+                                        .addGroup(layout.createParallelGroup(
+                                        GroupLayout.Alignment.CENTER)
                                                 .addComponent(lblSh1)
                                                 .addComponent(fldSh1)
                                         )
-                                        .addGroup(layout.createParallelGroup()
+                                        .addGroup(layout.createParallelGroup(
+                                        GroupLayout.Alignment.CENTER)
                                                 .addComponent(lblSh2)
                                                 .addComponent(fldSh2)
                                         )
@@ -2348,6 +2354,10 @@ private FloatEditor createCellFloatEditor(final JTable tb){
     
     return editor;
 }
+/**
+ * Создаем панель с таблицей меню
+ * @return 
+ */
  private JPanel createMenuPane(){
      JPanel menuPane = new JPanel(new BorderLayout());
     //Создаем бар для зоны меню

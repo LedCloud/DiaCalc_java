@@ -149,12 +149,13 @@ public class ErrorReport extends JFrame{
                         Thread.sleep(100);
                     }catch(Exception ex){}
                     if (Stack.getInstance().getStackTrace().size()>0){
-                    setVisible(true);
-                    while (Stack.getInstance().getStackTrace().size()>0){
-                        synchronized (Stack.getInstance()) {
-                            text.append(Stack.getInstance().getStackTrace().remove(0));
+                        setVisible(true);
+                        while (Stack.getInstance().getStackTrace().size()>0){
+                            synchronized (Stack.getInstance()) {
+                                text.append(Stack.getInstance()
+                                        .getStackTrace().remove(0));
+                            }
                         }
-                    }
                     }
                 }
             }

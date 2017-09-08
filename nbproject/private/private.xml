@@ -6,6 +6,7 @@
         <group>
             <file>file:/home/connie/NetBeansProjects/DiaCalcJ/src/tablemodels/DiaryTableModel.java</file>
             <file>file:/home/connie/NetBeansProjects/DiaCalcJ/src/lookout/DiaryJob.java</file>
+            <file>file:/home/connie/NetBeansProjects/DiaCalcJ/src/lookout/TwoColorsProgressBar.java</file>
             <file>file:/home/connie/NetBeansProjects/DiaCalcJ/src/lookout/MainFrame.java</file>
             <file>file:/home/connie/NetBeansProjects/DiaCalcJ/src/manager/DiaryManager.java</file>
         </group>

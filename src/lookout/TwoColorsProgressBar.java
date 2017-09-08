@@ -37,13 +37,15 @@ package lookout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import javax.swing.JProgressBar;
 
 /**
  * @author Toporov Konstantin <www.diacalc.org> 
  */
-//Прогресс бар с двумя градусниками
+/**
+ * Прогресс бар с двумя градусниками
+ * @author connie
+ */
 public class TwoColorsProgressBar extends JProgressBar{
     private static final Color ALEX_RED = new Color(0xDA,0x25,0x1D);//da251dff
     private static final Color ALEX_RED_LIGHT = new Color(0xF8,0xA2,0x9E);//da251dff
@@ -52,24 +54,38 @@ public class TwoColorsProgressBar extends JProgressBar{
     private static final int MAX_VALUE = 100;
     private int forcast = 0;
     
+    /**
+     * Инициализируем прогресс бар
+     */
     public TwoColorsProgressBar(){
         super(0,MAX_VALUE-1);
-        setOpaque(false);
+        //setOpaque(false);
         setOrientation(JProgressBar.VERTICAL);
     }
-    
+    /**
+     * Устанавливаем величину градусника, а заодно меняем его
+     * цвет на красный при превышении.
+     * @param vl 
+     */
     @Override
     public void setValue(int vl){
         if (vl>(MAX_VALUE-1)) setForeground(ALEX_RED);
         else setForeground(ALEX_GREEN);
         super.setValue(vl<MAX_VALUE?vl:(MAX_VALUE-1) );
     }
-    
+    /**
+     * Устанавливаем прогноз
+     * @param f - значение прогноза
+     */ 
     public void setForcast(int f){
         forcast = f;
         repaint();
     }
     
+    /**
+     * Отрисовываем прогноз поверх прогрессбара.
+     * @param g 
+     */
     @Override
     protected void paintComponent(Graphics g){
         super.paintComponent(g);//Рисуется обычный градусник

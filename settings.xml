@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.8.0_131" class="java.beans.XMLDecoder">
+ <object class="lookout.settings.SettingsData" id="SettingsData0">
+  <void property="carbRatio">
+   <boolean>true</boolean>
+  </void>
+  <void id="Rectangle0" property="diaryBounds">
+   <void class="java.awt.Rectangle" method="getField">
+    <string>x</string>
+    <void method="set">
+     <object idref="Rectangle0"/>
+     <int>75</int>
+    </void>
+   </void>
+   <void class="java.awt.Rectangle" method="getField">
+    <string>y</string>
+    <void method="set">
+     <object idref="Rectangle0"/>
+     <int>225</int>
+    </void>
+   </void>
+   <void class="java.awt.Rectangle" method="getField">
+    <string>width</string>
+    <void method="set">
+     <object idref="Rectangle0"/>
+     <int>1252</int>
+    </void>
+   </void>
+   <void class="java.awt.Rectangle" method="getField">
+    <string>height</string>
+    <void method="set">
+     <object idref="Rectangle0"/>
+     <int>467</int>
+    </void>
+   </void>
+  </void>
+  <void property="diaryCommSize">
+   <int>119</int>
+  </void>
+  <void property="diaryDateSize">
+   <int>145</int>
+  </void>
+  <void property="diaryMenuSplit">
+   <int>119</int>
+  </void>
+  <void property="diaryRestSize">
+   <int>66</int>
+  </void>
+  <void property="diarySplit">
+   <int>780</int>
+  </void>
+  <void property="groupSize">
+   <int>268</int>
+  </void>
+  <void id="Rectangle1" property="mainBounds">
+   <void class="java.awt.Rectangle" method="getField">
+    <string>x</string>
+    <void method="set">
+     <object idref="Rectangle1"/>
+     <int>511</int>
+    </void>
+   </void>
+   <void class="java.awt.Rectangle" method="getField">
+    <string>y</string>
+    <void method="set">
+     <object idref="Rectangle1"/>
+     <int>52</int>
+    </void>
+   </void>
+   <void class="java.awt.Rectangle" method="getField">
+    <string>width</string>
+    <void method="set">
+     <object idref="Rectangle1"/>
+     <int>1301</int>
+    </void>
+   </void>
+   <void class="java.awt.Rectangle" method="getField">
+    <string>height</string>
+    <void method="set">
+     <object idref="Rectangle1"/>
+     <int>716</int>
+    </void>
+   </void>
+  </void>
+  <void property="menuNameWidth">
+   <int>165</int>
+  </void>
+  <void property="menuRest">
+   <int>75</int>
+  </void>
+  <void property="menuSize">
+   <int>391</int>
+  </void>
+  <void property="menuWeightWidth">
+   <int>71</int>
+  </void>
+  <void property="prodName">
+   <int>229</int>
+  </void>
+  <void property="prodRest">
+   <int>74</int>
+  </void>
+  <void property="snackSize">
+   <int>180</int>
+  </void>
+  <void property="useSnack">
+   <boolean>true</boolean>
+  </void>
+  <void property="user">
+   <int>1</int>
+  </void>
+ </object>
+</java>

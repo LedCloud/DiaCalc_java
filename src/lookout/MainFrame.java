@@ -2797,6 +2797,9 @@ private FloatEditor createCellFloatEditor(final JTable tb){
             }
         });
         
+    }else{
+        //Перекус не используем, почистим таблицу на всякий случай
+        new MenuManager(user.getId(),MenuManager.SNACK_TABLE).flush();
     }
     if (snackList!=null){
         FocusAdapter ad =  new FocusAdapter(){
@@ -4343,6 +4346,7 @@ if ((grpList.getRowCount()>2)&&(grpList.getSelectedRow()>0))
 
           double wUp = upDiff * 100 / dose_diff;
           double wDown = downDiff * 100 / dose_diff;
+          
           Object[] options = {"+"+df00.format(wUp)+" г.",
                                     "Отмена",
                                     "-"+df00.format(wDown)+" г."};
@@ -4438,8 +4442,10 @@ if ((grpList.getRowCount()>2)&&(grpList.getSelectedRow()>0))
      //Если в данный момент сохраняют значения коэ-оф и сахаров, 
      //то ничего не делаем
      if (propertiesAreBeeignChanged) return;
-     if (menuList.getRowCount()>0 || (snackList!=null && snackList.getRowCount()>0) ){
-         //System.out.println( storeCoefs );
+     //Если меню пустое, то ничего не деаем.
+     if ((menuList.getRowCount()+(snackList==null?0:snackList.getRowCount()))==0){
+         return;
+     }
      Date now = new Date();
      SimpleDateFormat fr = new SimpleDateFormat("HH:mm");
 
@@ -4532,7 +4538,6 @@ if ((grpList.getRowCount()>2)&&(grpList.getSelectedRow()>0))
                         new DiaryManager(user).addMenu(u, menu, snack);
                         this.pcs.firePropertyChange( USER_CHANGED, null, user );
                     }
-     }
  }
  private void showDiary(){
     if (diary==null){

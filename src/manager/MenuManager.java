@@ -48,7 +48,6 @@ import java.sql.PreparedStatement;
 
 import products.ProductInMenu;
 import products.ProductW;
-import java.sql.Statement;
 
 
 public class MenuManager {

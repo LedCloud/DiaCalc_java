@@ -55,15 +55,15 @@ import org.json.simple.parser.ParseException;
 
 public class InetBackUpDialog extends JDialog implements ActionListener,
         PropertyChangeListener{
-    private ProgramSettings settings = ProgramSettings.getInstance();
-    private MainFrame owner;
+    private final ProgramSettings settings = ProgramSettings.getInstance();
+    private final MainFrame owner;
     private JTextArea log;
     private JScrollPane scr;
     private JProgressBar prBar;
     private JRadioButton rbIm1;
     private JRadioButton rbIm2;
     private JRadioButton rbIm3;
-    private InetUser inetData;
+    private final InetUser inetData;
     private JCheckBox chImMenu;
     private JCheckBox chExMenu;
     private JCheckBox chExProducts;
@@ -80,7 +80,7 @@ public class InetBackUpDialog extends JDialog implements ActionListener,
     private JPasswordField fldPass;
     private JTextField fldServer;
     private boolean sync = false;
-    private InetUserManager inetMgr = new InetUserManager();
+    private final InetUserManager inetMgr = new InetUserManager();
 
     private final static String SCRIPT = "server.php";
 
@@ -1114,7 +1114,7 @@ public class InetBackUpDialog extends JDialog implements ActionListener,
         
         tooltipPane.setBorder(BorderFactory.createRaisedBevelBorder());
         tooltipPane.add(lbl);
-        final JWindow w = new JWindow();
+        final JWindow w = new JWindow(this);
         w.add(tooltipPane);
         w.setSize(lbl.getPreferredSize().width+30, lbl.getPreferredSize().height+20);
         rb.addMouseListener(new MouseAdapter(){
@@ -1143,17 +1143,18 @@ public class InetBackUpDialog extends JDialog implements ActionListener,
         chImMenu = new JCheckBox("Меню, коэффициенты и рассчет");
         chImProducts = new JCheckBox("База продуктов");
         
-        rbIm1 = createRdBtn("Объединение","В этом режиме происходит объединение\n" +
-                       "баз с сервера и локальной базы, если на\n" +
-                       "сервере есть какие то продукты или группы,\n" +
-                       "которых нет в локальной базе, то они будут\n" +
-                       "добавлены. Это предпочтительный режим");
+        rbIm1 = createRdBtn("Объединение",
+                    "<html>В этом режиме происходит объединение<br>" +
+                       "базы с сервера и локальной базы, если на<br>" +
+                       "сервере есть какие то продукты или группы,<br>" +
+                       "которых нет в локальной базе, то они будут<br>" +
+                       "добавлены. Это предпочтительный режим</html>");
         rbIm2 = createRdBtn("Добавление",
-                    "В этом режиме происходит добавление\n" +
-                       "баз с сервера к локальной базе, если\n" +
-                       "на сервере есть какие то продукты или\n" +
-                       "группы, то они будут добавлены после\n" +
-                       "существующих продуктов."
+                    "<html>В этом режиме происходит добавление<br>" +
+                       "баз с сервера к локальной базе, если<br>" +
+                       "на сервере есть какие то продукты или<br>" +
+                       "группы, то они будут добавлены после<br>" +
+                       "существующих продуктов.</html>"
                 );
         rbIm3 = createRdBtn("Очистка и добавление",
                 "<html>В этом режиме существующая локально база<br>" +

@@ -43,7 +43,7 @@ import java.util.ArrayList;
 
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
-import java.sql.Statement;
+//import java.sql.Statement;
 
 import java.util.Collection;
 import java.sql.SQLException;
@@ -53,7 +53,7 @@ import java.util.Date;
 
 
 public class CoefsManager {
-    private ManagementSystem manager;
+    private final ManagementSystem manager;
     private Collection<CoefsSet> coefs;
     private User user;
     
@@ -65,28 +65,32 @@ public class CoefsManager {
     public Collection<CoefsSet> getCoefs(){
         coefs = new ArrayList();
         try {   
-         
-         PreparedStatement stmt = manager.getConnection().prepareStatement(
-         "SELECT idCoef, k1, k2, k3, time " +
-         "FROM coefSets WHERE idUser=? ORDER BY time;");
-         stmt.setInt(1, user.getId());
+            PreparedStatement stmt = manager.getConnection().prepareStatement(
+                "SELECT idCoef, k1, k2, k3, time " +
+                "FROM coefSets WHERE idUser=? ORDER BY time;");
+            stmt.setInt(1, user.getId());
 
-         ResultSet rs = stmt.executeQuery();
-          int i = 0;
-          while(rs.next()) {
-              coefs.add(new CoefsSet(rs.getInt("idCoef"),rs.getFloat("k1"),
-                    rs.getFloat("k2"),rs.getFloat("k3"),new Date(rs.getLong("time")),++i,
-                    CoefsSet.ORDER));
-          }
+            ResultSet rs = stmt.executeQuery();
+            int i = 0;
+            while(rs.next()) {
+                coefs.add(new CoefsSet( rs.getInt("idCoef"),
+                                        rs.getFloat("k1"),
+                                        rs.getFloat("k2"),
+                                        rs.getFloat("k3"),
+                                        new Date(rs.getLong("time")),
+                                        ++i,
+                                        CoefsSet.ORDER));
+            }
 
-        rs.close();
-        stmt.close();
-        manager.getConnection().commit();
-     }
+           rs.close();
+           stmt.close();
+           manager.getConnection().commit();
+        }
         catch (SQLException e) {
-        e.printStackTrace();
-     }
-     return coefs;
+            e.printStackTrace();
+        }
+        
+        return coefs;
     }
 
     public Collection<CoefsSet> changeUser(User user){
@@ -102,31 +106,32 @@ public class CoefsManager {
 
     public Collection<CoefsSet> updateCoef(CoefsSet coef){
         try {
-         PreparedStatement stmt = manager.getConnection().prepareStatement(
-                 "UPDATE coefSets SET k1=?, k2=?, k3=?, time=? " +
-                 "WHERE idCoef=?;");
-         stmt.setFloat(1, coef.getK1());
-         stmt.setFloat(2, coef.getK2());
-         stmt.setFloat(3, coef.getK3());
-         stmt.setLong(4, coef.getTime().getTime());
-         stmt.setInt(5, coef.getId());
+            PreparedStatement stmt = manager.getConnection().prepareStatement(
+                    "UPDATE coefSets SET k1=?, k2=?, k3=?, time=? " +
+                    "WHERE idCoef=?;");
+            stmt.setFloat(1, coef.getK1());
+            stmt.setFloat(2, coef.getK2());
+            stmt.setFloat(3, coef.getK3());
+            stmt.setLong(4, coef.getTime().getTime());
+            stmt.setInt(5, coef.getId());
 
-         stmt.executeUpdate();
-         stmt.close();
-         manager.getConnection().commit();
+            stmt.executeUpdate();
+            stmt.close();
+            manager.getConnection().commit();
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
+        
         return getCoefs();
     }
 
     public Collection<CoefsSet> addCoef(CoefsSet coef){
         try{
             PreparedStatement stmt = manager.getConnection().prepareStatement(
-                 "INSERT INTO coefSets " +
-                 "(k1, k2, k3, time, idUser) " +
-                 "VALUES (?, ?, ?, ?, ?);");
+                "INSERT INTO coefSets " +
+                "(k1, k2, k3, time, idUser) " +
+                "VALUES (?, ?, ?, ?, ?);");
             stmt.setFloat(1, coef.getK1());
             stmt.setFloat(2, coef.getK2());
             stmt.setFloat(3, coef.getK3());
@@ -140,13 +145,15 @@ public class CoefsManager {
         }catch (SQLException ex){
             ex.printStackTrace();
         }
+        
         return getCoefs();
     }
+    
     public Collection<CoefsSet> deleteCoef(CoefsSet coef){
         try{
             PreparedStatement stmt = manager.getConnection().prepareStatement(
-                 "DELETE FROM coefSets " +
-                 "WHERE idCoef=?;");
+                "DELETE FROM coefSets " +
+                "WHERE idCoef=?;");
             stmt.setInt(1, coef.getId());
 
             stmt.executeUpdate();
@@ -155,6 +162,7 @@ public class CoefsManager {
         } catch (SQLException e) {
                 e.printStackTrace();
         }
+        
         return getCoefs();
     }
 }

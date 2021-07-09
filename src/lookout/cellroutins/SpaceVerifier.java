@@ -45,8 +45,9 @@ import javax.swing.JTextField;
 public class SpaceVerifier extends InputVerifier {
     @Override
     public boolean verify(JComponent input) {
-               JTextField tf = (JTextField) input;
-               return tf.getText().length()>0;
+        JTextField tf = (JTextField) input;
+        
+        return tf.getText().length()>0;
     }
 
     @Override

@@ -48,8 +48,8 @@ import java.util.*;
 import maths.Sugar;
 
 public class DiaryTableModel extends AbstractTableModel{
-    private final ProgramSettings settings = ProgramSettings.getInstance();
-    private Vector<DiaryUnit> records = null;
+    //private final ProgramSettings settings = ProgramSettings.getInstance();
+    private ArrayList<DiaryUnit> records = null;
     private User user;
     private final DiaryManager manager;
     private Date from;
@@ -62,20 +62,24 @@ public class DiaryTableModel extends AbstractTableModel{
         this.to = to;
         fetchData(from,to,"");
     }
+    
     private void fetchData(Date from,Date to,String search){
-        records = new Vector(manager.getDiaryRecords(from.getTime(), to.getTime(),search));
+        records = new ArrayList(manager.getDiaryRecords(from.getTime(), to.getTime(),search));
     }
+    
     public void refresh(String search){
         //System.out.println( search );
         fetchData(from,to,search);
         this.fireTableDataChanged();
     }
+    
     public DiaryUnit getUnit(int row){
         if (records!=null && records.size()>0 && row>=0){
             return records.get(row);
         }
         return null;
     }
+    
     /**
      * Добавляем событие в дневник
      * @param u - событие DiaryUnit
@@ -89,6 +93,7 @@ public class DiaryTableModel extends AbstractTableModel{
         }
         //refresh(search);
     }
+    
     public void deleteUnit(DiaryUnit u, String search){
         if (records!=null && records.size()>0){
             int row= records.indexOf(u);
@@ -101,12 +106,14 @@ public class DiaryTableModel extends AbstractTableModel{
           refresh(search);
         }
     }
+    
     public void changeDates(Date from,Date to,String search){
         this.from = from;
         this.to = to;
         fetchData(from,to,search);
         this.fireTableDataChanged();
     }
+    
     /**
      * Меняем пользователя и вытягиваем новые данные
      * @param user
@@ -118,6 +125,7 @@ public class DiaryTableModel extends AbstractTableModel{
         fetchData(from,to,search);
         this.fireTableDataChanged();
     }
+    
     @Override
     public String getColumnName(int column)
     {
@@ -127,6 +135,7 @@ public class DiaryTableModel extends AbstractTableModel{
         return colNames[column];
 
     }
+    
     @Override
     public int getRowCount(){
         if (records != null) {
@@ -141,69 +150,69 @@ public class DiaryTableModel extends AbstractTableModel{
         return 9;
     }
 
-  @Override
-  public Object getValueAt(int rowIndex, int columnIndex)
-  {
-    if (records != null && records.size()>0 
-            && rowIndex<records.size() && rowIndex>=0) {
-      DiaryUnit u = records.get(rowIndex);
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex)
+    {
+      if (records != null && records.size()>0 
+              && rowIndex<records.size() && rowIndex>=0) {
+        DiaryUnit u = records.get(rowIndex);
 
-      switch (columnIndex) {
-        case 0:
-            return new Date(u.getTime());
-        case 1:
-            return u.getComment();
-      }
-      if (u.getType()==DiaryUnit.COMMENT){
-          return null;//Далее возвращать можно null
-      }
-      if (u.getType()==DiaryUnit.SUGAR){
-          if (columnIndex==2){
-              return new Sugar(u.getSh1()).getSugar(user.isMmol(), user.isPlasma());
-          }else{
-              return null;
-          }
-      }
-      //Если дошли до сюда, то значит отдаем меню
-      switch (columnIndex){
-        case 2:
-          return new Sugar(u.getSh1()).getSugar(user.isMmol(), user.isPlasma());
-        case 3:
-          return new Sugar(u.getSh2()).getSugar(user.isMmol(), user.isPlasma());
-        case 4:
-          return u.getDose();
-        case 5:
-            return u.getProduct().getAllProt();
-        case 6:
-            return u.getProduct().getAllFat();
-        case 7:
-            return u.getProduct().getAllCarb();
-        case 8:
-            return u.getProduct().getGi();
+        switch (columnIndex) {
+          case 0:
+              return new Date(u.getTime());
+          case 1:
+              return u.getComment();
         }
-     }
-    return null;
-  }
-
-  @Override
-  public Class getColumnClass(int col) {
-      switch (col){
-          case 0: return Date.class;
-          case 1: return String.class;
+        if (u.getType()==DiaryUnit.COMMENT){
+            return null;//Далее возвращать можно null
+        }
+        if (u.getType()==DiaryUnit.SUGAR){
+            if (columnIndex==2){
+                return new Sugar(u.getSh1()).getSugar(user.isMmol(), user.isPlasma());
+            }else{
+                return null;
+            }
+        }
+        //Если дошли до сюда, то значит отдаем меню
+        switch (columnIndex){
           case 2:
+            return new Sugar(u.getSh1()).getSugar(user.isMmol(), user.isPlasma());
           case 3:
+            return new Sugar(u.getSh2()).getSugar(user.isMmol(), user.isPlasma());
           case 4:
+            return u.getDose();
           case 5:
+              return u.getProduct().getAllProt();
           case 6:
-          case 7: return Float.class;
-          case 8: return Integer.class;
-          
-      }
+              return u.getProduct().getAllFat();
+          case 7:
+              return u.getProduct().getAllCarb();
+          case 8:
+              return u.getProduct().getGi();
+          }
+       }
       return null;
-  }
+    }
 
-  @Override
-  public boolean isCellEditable(int row, int col) {
-        return false;
-  }
+    @Override
+    public Class getColumnClass(int col) {
+        switch (col){
+            case 0: return Date.class;
+            case 1: return String.class;
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7: return Float.class;
+            case 8: return Integer.class;
+
+        }
+        return null;
+    }
+
+    @Override
+    public boolean isCellEditable(int row, int col) {
+          return false;
+    }
 }

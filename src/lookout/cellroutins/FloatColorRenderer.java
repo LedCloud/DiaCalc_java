@@ -59,7 +59,6 @@ import maths.Sugar;
 
 
 public class FloatColorRenderer extends DefaultTableCellRenderer{
-   
     private final JFormattedTextField fld;
     private Border selectedBorder=null;
     private Border unselectedBorder=null;
@@ -80,9 +79,11 @@ public class FloatColorRenderer extends DefaultTableCellRenderer{
         //format.setMinimumFractionDigits(1);
         //format.setMaximumFractionDigits(1);
     }
+    
     public void changeUser(User us){
         user = us;
     }
+    
     @Override 
     public Component getTableCellRendererComponent(
                             JTable table, Object value,
@@ -124,5 +125,4 @@ public class FloatColorRenderer extends DefaultTableCellRenderer{
  
      return fld;
     }
-
 }

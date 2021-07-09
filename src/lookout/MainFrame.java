@@ -252,7 +252,6 @@ PropertyChangeListener, TableModelListener, ItemListener {
     private JSpinner sp;
     private ProdDialog prodDialog=null;
     
-    
     private JTextField fldUser=null;
     private final UsersManager usersMgr;
     private int currentUser;
@@ -407,7 +406,14 @@ PropertyChangeListener, TableModelListener, ItemListener {
             }
          }
      });
+     //if (prodList.getRowSorter()!=null){
+                prodList.getRowSorter().setSortKeys(null);
+                prodList.setRowSorter(null);
+                //cmplList.getRowSorter().setSortKeys(null);
+                //cmplList.setRowSorter(null);
+       //       }
   }
+  
   public void refreshUser(){
       this.pcs.firePropertyChange( USER_CHANGED, null, user );
   }
@@ -895,8 +901,8 @@ private void showInetBackUpDialog(){
 private void printProducts(int mode){
     PrinterJob job = PrinterJob.getPrinterJob();
     job.setPrintable(new BasePrinter(mode,
-            new Vector(groupMgr.getGroups(GroupManager.ONLY_EXISTS_GROUPS)),
-            new Vector(prodMgr.getAllProducts()),
+            new ArrayList(groupMgr.getGroups(GroupManager.ONLY_EXISTS_GROUPS)),
+            new ArrayList(prodMgr.getAllProducts()),
             user));
     if (attr_set==null){
         PageFormat pf = job.defaultPage();
@@ -1398,7 +1404,7 @@ private void printMenu(){
     
      CoefsManager cfMgr = new CoefsManager(user);
      storeCoefs = false;
-     Vector<CoefsSet> cfs = new Vector(cfMgr.getCoefs());
+     ArrayList<CoefsSet> cfs = new ArrayList(cfMgr.getCoefs());
      for (CoefsSet item:cfs){
          item.setK3(new Sugar(item.getK3()).getSugar(user.isMmol(),user.isPlasma()));
          Factors f = new Factors(
@@ -1417,7 +1423,7 @@ private void printMenu(){
      if (user.isTimeSense()){
          //Тут вычисляем время и подставляем нужные коэф-ты
          TimedCoefsSet timedCfs = new TimedCoefsSet(cfs);
-         factorsChooser = new JComboBox(new Vector(timedCfs.getTimedCoefs()));
+         factorsChooser = new JComboBox((new ArrayList(timedCfs.getTimedCoefs())).toArray());
          factorsChooser.setForeground(Color.BLACK);
          if (factorsChooser.getItemCount()>0){
              Date now = new Date();
@@ -1442,7 +1448,7 @@ private void printMenu(){
          //но выбор делать только при старте
 
      }else{
-         factorsChooser = new JComboBox(cfs);
+         factorsChooser = new JComboBox(cfs.toArray());
          factorsChooser.setForeground(Color.GRAY);
      }
      fldK1.setValue(user.getFactors().getK1(user.isDirect()));
@@ -1769,9 +1775,9 @@ private void printMenu(){
         }
      };
      prodList.getInputMap(JInternalFrame.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
-        .put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, KeyEvent.CTRL_MASK), ADD2SNACK);
+        .put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, KeyEvent.CTRL_DOWN_MASK), ADD2SNACK);
      prodList.getInputMap(JInternalFrame.WHEN_FOCUSED)
-         .put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, KeyEvent.CTRL_MASK), ADD2SNACK);
+         .put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, KeyEvent.CTRL_DOWN_MASK), ADD2SNACK);
      prodList.getActionMap().put(ADD2SNACK, actionAdd2Snack);
 
     popup = new JPopupMenu();
@@ -3747,7 +3753,7 @@ private FloatEditor createCellFloatEditor(final JTable tb){
              //Все заполенение делаем тут
                 factorsChooser.removeAllItems();
                 CoefsManager cfMgr = new CoefsManager(user);
-                Vector<CoefsSet> cfs = new Vector(cfMgr.getCoefs());
+                ArrayList<CoefsSet> cfs = new ArrayList(cfMgr.getCoefs());
                 for (CoefsSet item:cfs){
                     item.setK3(new Sugar(item.getK3()).getSugar(user.isMmol(),user.isPlasma()));
                     Factors f = new Factors(
@@ -3764,7 +3770,7 @@ private FloatEditor createCellFloatEditor(final JTable tb){
                 if (user.isTimeSense()){
                     //Тут вычисляем время и подставляем нужные коэф-ты
                     TimedCoefsSet timedCfs = new TimedCoefsSet(cfs);
-                    Vector v = new Vector(timedCfs.getTimedCoefs());
+                    ArrayList v = new ArrayList(timedCfs.getTimedCoefs());
                     for (Object item:v){
                         factorsChooser.addItem(item);
                     }

@@ -35,7 +35,7 @@ package lookout.cellroutins;
 
 
 import javax.swing.*;
-import lookout.settings.ProgramSettings;
+//import lookout.settings.ProgramSettings;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;

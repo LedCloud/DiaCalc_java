@@ -46,50 +46,54 @@ import java.text.*;
 
 
 public class FloatEditor extends DefaultCellEditor{
-  private NumberFormat floatFormat;
-  private PositiveFloatVerifier pfv = new PositiveFloatVerifier(true);
+    private NumberFormat floatFormat;
+    private PositiveFloatVerifier pfv = new PositiveFloatVerifier(true);
 
-  public FloatEditor(final JFormattedTextField tf, NumberFormat nf) {
-   super(tf);
-   floatFormat = nf;
-   tf.setFocusLostBehavior(JFormattedTextField.COMMIT_OR_REVERT);
-   tf.setHorizontalAlignment(SwingConstants.RIGHT);
-   tf.setBorder(null);
-   tf.addFocusListener(new FocusAdapter(){
-       @Override
-       public void focusLost(FocusEvent e) {
-           //Сообщаем слушателяем, что надо заканчивать
-           FloatEditor.this.stopCellEditing();
-       }
-   });
+    public FloatEditor(final JFormattedTextField tf, NumberFormat nf) {
+        super(tf);
+        floatFormat = nf;
+        tf.setFocusLostBehavior(JFormattedTextField.COMMIT_OR_REVERT);
+        tf.setHorizontalAlignment(SwingConstants.RIGHT);
+        tf.setBorder(null);
+        tf.addFocusListener(new FocusAdapter(){
+            @Override
+            public void focusLost(FocusEvent e) {
+                //Сообщаем слушателяем, что надо заканчивать
+                FloatEditor.this.stopCellEditing();
+            }
+        });
    
-   delegate = new EditorDelegate() {
-     @Override
-    public void setValue(Object param) {
-     Float _value = (Float)param;
-     if (_value == null) {
-      tf.setValue(floatFormat.format(0.0f));
-     } else {
-      Float _d = _value.floatValue();
-      String _format = floatFormat.format(_d);
-      tf.setText(_format);
-     }
-     tf.selectAll();
-    }
+        delegate = new EditorDelegate() {
+            @Override
+            public void setValue(Object param) {
+                Float _value = (Float)param;
+                if (_value == null) {
+                    tf.setValue(floatFormat.format(0.0f));
+                } else {
+                    //Float _d = _value.floatValue();
+                    //String _format = floatFormat.format(_d);
+                    String _format = floatFormat.format(_value);
+                    tf.setText(_format);
+                }
+                tf.selectAll();
+            }
 
-     @Override
-    public Object getCellEditorValue() {
-     try {
-      pfv.verify(tf);
-      String _field = tf.getText();
-      Number _number = floatFormat.parse(_field);
-      Float _parsed = _number.floatValue();
-      Float d = new Float(_parsed);
-      return d;
-     } catch (ParseException e) {
-        return new Float(0.0f);
-     }
-    }
-   };
+            @Override
+            public Object getCellEditorValue() {
+                try {
+                    pfv.verify(tf);
+                    String _field = tf.getText();
+                    Number _number = floatFormat.parse(_field);
+                    Float _parsed = _number.floatValue();
+                    /*Float d = new Float(_parsed);
+                    
+                    return d;*/
+                    return _parsed;
+                } catch (ParseException e) {
+                    //return new Float(0.0f);
+                    return 0.0f;
+                }
+            }
+      };
   }
 }

@@ -48,28 +48,34 @@ public class InetUser {
         this.pass = pass;
         this.serverpath = server;
     }
+    
     public InetUser(){
         login = "";
         pass = "";
         serverpath = "";
     }
+    
     public String getPass(){
         return pass;
     }
+    
     public String getLogin(){
         return login;
     }
+    
     public String getServer(){
         return serverpath;
     }
+    
     public void setLogin(String v){
         login = v;
     }
+    
     public void setPass(String v){
         pass = v;
     }
+    
     public void setServer(String v){
         serverpath = v;
     }
-
 }

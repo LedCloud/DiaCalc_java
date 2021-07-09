@@ -39,8 +39,8 @@ package tablemodels;
  * @author Toporov Konstantin <www.diacalc.org>
  */
 
-import lookout.settings.ProgramSettings;
-import java.util.Vector;
+import java.util.ArrayList;
+//import lookout.settings.ProgramSettings;
 import javax.swing.table.AbstractTableModel;
 
 
@@ -50,89 +50,93 @@ import products.ProdGroup;
 import products.ProductInBase;
 
 public class ArcSearchTableModel  extends AbstractTableModel {
-    private ArcSearchProdManager mgr = new ArcSearchProdManager();
-    private Vector<Pair> searchResults;
-    private ProgramSettings settings = ProgramSettings.getInstance();
+    private final ArcSearchProdManager mgr = new ArcSearchProdManager();
+    private ArrayList<Pair> searchResults;
+    //private final ProgramSettings settings = ProgramSettings.getInstance();
 
     public ArcSearchTableModel(){
-        searchResults = new Vector(mgr.doSearch(""));
+        searchResults = new ArrayList(mgr.doSearch(""));
     }
 
     @Override
-  public int getRowCount()
-  {
-    if (searchResults!= null) {
-      return searchResults.size();
-    }
-    return 0;
-  }
-  // Количество столбцов - 6
-    @Override
-  public int getColumnCount()
-  {
-    return 6;
-  }
-  // Вернем наименование колонки
-  public @Override String getColumnName(int column)
-  {
-    String[] colNames = {"Группа","Наименование", "Б", "Ж", "У","ГИ" };
-    return colNames[column];
-  }
-   // Возвращаем данные для определенной строки и столбца
-    @Override
-  public Object getValueAt(int rowIndex, int columnIndex){
-    if (searchResults != null && searchResults.size()>0
-            && rowIndex<searchResults.size() && rowIndex>=0)  {
-      Pair pair = searchResults.get(rowIndex);
-      
-      switch (columnIndex) {
-      case 0://Наименование группы
-        return pair.getGroup().getName();
-
-      case 1://Наименование продукта
-        return pair.getProduct().getName();
-
-      case 2://Б
-        return pair.getProduct().getProt();
-
-      case 3://Ж
-        return pair.getProduct().getFat();
-
-      case 4://У
-        return pair.getProduct().getCarb();
-
-      case 5:
-        return pair.getProduct().getGi();
-
+    public int getRowCount()
+    {
+      if (searchResults!= null) {
+        return searchResults.size();
       }
+      return 0;
     }
-    return null;
+    
+    // Количество столбцов - 6
+    @Override
+    public int getColumnCount()
+    {
+      return 6;
+    }
+    
+    // Вернем наименование колонки
+    public @Override String getColumnName(int column)
+    {
+      String[] colNames = {"Группа","Наименование", "Б", "Ж", "У","ГИ" };
+      return colNames[column];
+    }
+    
+    // Возвращаем данные для определенной строки и столбца
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex){
+      if (searchResults != null && searchResults.size()>0
+              && rowIndex<searchResults.size() && rowIndex>=0)  {
+        Pair pair = searchResults.get(rowIndex);
 
-  }
-  @Override
-  public Class getColumnClass(int c) {
-      if (searchResults!=null && searchResults.size()>0 )
-          return getValueAt(0, c).getClass();
-      else return null;
-  }
-  public void doSearch(String st){
-      int sz = searchResults.size();
-      searchResults = new Vector(mgr.doSearch(st));
-      if (searchResults.size()>0) fireTableDataChanged();
-      else if (sz>0) fireTableRowsDeleted(0,sz-1);
-  }
+        switch (columnIndex) {
+        case 0://Наименование группы
+          return pair.getGroup().getName();
 
-  public ProdGroup getGroup(int rowInx){
-      if (searchResults.size()>0){
-        Pair pr = searchResults.get(rowInx);
-        return pr.getGroup();
-      } else return null;
-  }
+        case 1://Наименование продукта
+          return pair.getProduct().getName();
 
-  public ProductInBase getProduct(int rowInx){
-      if (searchResults.size()>0){
-        Pair pr = searchResults.get(rowInx);
-        return pr.getProduct();
-      } else return null;
-  }
+        case 2://Б
+          return pair.getProduct().getProt();
+
+        case 3://Ж
+          return pair.getProduct().getFat();
+
+        case 4://У
+          return pair.getProduct().getCarb();
+
+        case 5:
+          return pair.getProduct().getGi();
+
+        }
+      }
+      return null;
+    }
+    
+    @Override
+    public Class getColumnClass(int c) {
+        if (searchResults!=null && searchResults.size()>0 )
+            return getValueAt(0, c).getClass();
+        else return null;
+    }
+    
+    public void doSearch(String st){
+        int sz = searchResults.size();
+        searchResults = new ArrayList(mgr.doSearch(st));
+        if (searchResults.size()>0) fireTableDataChanged();
+        else if (sz>0) fireTableRowsDeleted(0,sz-1);
+    }
+
+    public ProdGroup getGroup(int rowInx){
+        if (searchResults.size()>0){
+          Pair pr = searchResults.get(rowInx);
+          return pr.getGroup();
+        } else return null;
+    }
+
+    public ProductInBase getProduct(int rowInx){
+        if (searchResults.size()>0){
+          Pair pr = searchResults.get(rowInx);
+          return pr.getProduct();
+        } else return null;
+    }
 }

@@ -51,19 +51,21 @@ public class Plate  implements Serializable{
         name = "Новая";
         weight = 0f;
     }
+    
     public Plate(int id,String name,float w){
         this.id = id;
         this.name = name;
         weight = w;
-        
     }
 
     public int getId(){
         return id;
     }
+    
     public String getName(){
         return name;
     }
+    
     public float getWeight(){
         return weight;
     }
@@ -71,14 +73,16 @@ public class Plate  implements Serializable{
     public void setId(int v){
         id = v;
     }
+    
     public void setName(String v){
         name = v;
     }
+    
     public void setWeight(float v){
         weight = v;
     }
-    
 }
+
 /*
  * BufferedImage img = null;
 try {

@@ -45,7 +45,7 @@ import java.sql.PreparedStatement;
 
 import java.util.Collection;
 import java.sql.SQLException;
-import java.sql.Statement;
+//import java.sql.Statement;
 
 
 import products.ComplexProduct;
@@ -53,7 +53,7 @@ import products.ProductW;
 
 
 public class ComplexManager {
-    private ManagementSystem manager;
+    private final ManagementSystem manager;
     
     public ComplexManager(){
         manager = ManagementSystem.getInstance();
@@ -63,29 +63,33 @@ public class ComplexManager {
         Collection products = new ArrayList();
 
         try {   
-         
-         PreparedStatement stmt = manager.getConnection().prepareStatement(
-        "SELECT Name, Prot, Fat, Carb, Gi, Weight, " +
-        "idProd, Owner FROM complex WHERE Owner=? ORDER BY Name;");
+            PreparedStatement stmt = manager.getConnection().prepareStatement(
+                "SELECT Name, Prot, Fat, Carb, Gi, Weight, " +
+                "idProd, Owner FROM complex WHERE Owner=? ORDER BY Name;");
 
-        stmt.setInt(1, idProd);
+            stmt.setInt(1, idProd);
 
-        ResultSet rs = stmt.executeQuery();
+            ResultSet rs = stmt.executeQuery();
+
+            while(rs.next()) {
+                products.add( new ComplexProduct(rs.getString("Name"),
+                                                rs.getFloat("Prot"),
+                                                rs.getFloat("Fat"),
+                                                rs.getFloat("Carb"),
+                                                rs.getInt("Gi"),
+                                                rs.getFloat("Weight"),
+                                                rs.getInt("idProd"),
+                                                rs.getInt("Owner")));
+            }
         
-        while(rs.next()) {
-            products.add( new ComplexProduct(rs.getString("Name"),rs.getFloat("Prot"),
-                rs.getFloat("Fat"),rs.getFloat("Carb"),rs.getInt("Gi"),
-                rs.getFloat("Weight"),rs.getInt("idProd"),rs.getInt("Owner")));
-        }
-        
-        rs.close();
-        stmt.close();
-        manager.getConnection().commit();
+            rs.close();
+            stmt.close();
+            manager.getConnection().commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-    return products;
+        return products;
     }
     
     public Collection addComplexProducts(Collection products,int idProd)
@@ -113,39 +117,39 @@ public class ComplexManager {
             stmt.close();
 
             manager.getConnection().commit();
-            
         }catch (SQLException ex)     {
             ex.printStackTrace();
         }
+        
         return getComposition(idProd);
     }
         
     public Collection addProduct(ProductW prod,int idProd)
     {
-         try{
+        try{
             PreparedStatement stmt = manager.getConnection().prepareStatement(
                     "INSERT INTO complex "+
                     "(Name, Prot, Fat, Carb, Gi, Weight, Owner) "+
                     "VALUES (?, ?, ?, ?, ?, ?, ?);"
                     );
            
-                stmt.setString(1, prod.getName());
-                stmt.setFloat(2, prod.getProt());
-                stmt.setFloat(3, prod.getFat());
-                stmt.setFloat(4, prod.getCarb());
-                stmt.setInt(5, prod.getGi());
-                stmt.setFloat(6, prod.getWeight());
-                stmt.setInt(7, idProd);
-                
-                stmt.executeUpdate();
+            stmt.setString(1, prod.getName());
+            stmt.setFloat(2, prod.getProt());
+            stmt.setFloat(3, prod.getFat());
+            stmt.setFloat(4, prod.getCarb());
+            stmt.setInt(5, prod.getGi());
+            stmt.setFloat(6, prod.getWeight());
+            stmt.setInt(7, idProd);
 
-                stmt.close();
-                manager.getConnection().commit();
+            stmt.executeUpdate();
 
-         }
-         catch(SQLException ex){
-             ex.printStackTrace();
-         }
+            stmt.close();
+            manager.getConnection().commit();
+
+        }
+        catch(SQLException ex){
+            ex.printStackTrace();
+        }
         return getComposition(idProd);
     }
     
@@ -164,6 +168,7 @@ public class ComplexManager {
         } catch (SQLException e) {
                 e.printStackTrace();
         }
+        
         return getComposition(prod.getOwner());
     }
     
@@ -181,6 +186,7 @@ public class ComplexManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        
         return getComposition(prod.getOwner());
     }
     
@@ -198,6 +204,7 @@ public class ComplexManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        
         return getComposition(idOwner);
     }
 }

@@ -51,7 +51,7 @@ import products.ProdGroup;
 import products.ProductInBase;
 
 public class GroupManager {
-    private ManagementSystem manager;
+    private final ManagementSystem manager;
     public static final int ONLY_EXISTS_GROUPS = 0;
     public static final int VIRTUAL_GROUP_ALSO = 1;
     
@@ -75,24 +75,26 @@ public class GroupManager {
                     groups.add(new ProdGroup(0,"Часто используемые",0));
                 }
                 groups.add(new ProdGroup(rs.getInt("idGroup"),
-                        rs.getString("Name"),rs.getInt("sortInd")));
+                                        rs.getString("Name"),
+                                        rs.getInt("sortInd")));
             }
 
-        rs.close();
-        stmt.close();
-        manager.getConnection().commit();
-        
-        } catch (SQLException e) {
-        e.printStackTrace();
+            rs.close();
+            stmt.close();
+            manager.getConnection().commit();
         }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
         return groups; 
     }
     
     public Collection addGroup(ProdGroup gr, int mode){
         try{
             PreparedStatement stmt = manager.getConnection().prepareStatement(
-            "INSERT INTO groups "+
-            "(Name, sortInd) VALUES (?, ?);");
+                "INSERT INTO groups "+
+                "(Name, sortInd) VALUES (?, ?);");
 
             stmt.setString(1, gr.getName());
             stmt.setInt(2, gr.getSortInd());
@@ -100,10 +102,10 @@ public class GroupManager {
             stmt.executeUpdate();
             stmt.close();
             manager.getConnection().commit();
-
         }catch (SQLException ex){
             ex.printStackTrace();
         }
+        
         return getGroups(mode);
     }
     
@@ -111,8 +113,8 @@ public class GroupManager {
         Collection cmplProds = new ArrayList();
         try{
             PreparedStatement stmt = manager.getConnection().prepareStatement(
-            "SELECT idProd FROM products "+
-            "WHERE idGroup=? AND compl=1;");
+                "SELECT idProd FROM products "+
+                "WHERE idGroup=? AND compl=1;");
             stmt.setInt(1, gr.getId());
             
             ResultSet rs = stmt.executeQuery();
@@ -123,7 +125,6 @@ public class GroupManager {
             
             
             if (cmplProds.size()>0){
-            
                 stmt = manager.getConnection().prepareStatement(
                     "DELETE FROM complex " +
                     "WHERE Owner=?;");
@@ -132,7 +133,6 @@ public class GroupManager {
                     stmt.setInt(1, ((ProductInBase)item).getId());
                     stmt.executeUpdate();
                 }
-        
             }
 
             stmt = manager.getConnection().prepareStatement(
@@ -156,30 +156,28 @@ public class GroupManager {
             e.printStackTrace();
         }
        
-        
         return getGroups(mode);
     }
     
     public Collection updateGroup(ProdGroup gr, int mode){
         try {
-        PreparedStatement 
-           stmt = manager.getConnection().prepareStatement(
-        "UPDATE groups SET Name=?, sortInd=? WHERE idGroup=?;");
+            PreparedStatement 
+               stmt = manager.getConnection().prepareStatement(
+                    "UPDATE groups SET Name=?, sortInd=? WHERE idGroup=?;");
 
-        stmt.setString(1, gr.getName());
-        stmt.setInt(2, gr.getSortInd());
-        stmt.setInt(3, gr.getId());
+            stmt.setString(1, gr.getName());
+            stmt.setInt(2, gr.getSortInd());
+            stmt.setInt(3, gr.getId());
 
-        
-        stmt.execute();
-        
-        stmt.close();
-        manager.getConnection().commit();
-        
-        } catch (SQLException e) {
+            stmt.execute();
+
+            stmt.close();
+            manager.getConnection().commit();
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
+        
         return getGroups(mode);
     }
-   
 }

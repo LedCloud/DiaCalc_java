@@ -46,7 +46,7 @@ import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.net.URL;
 import javax.swing.ImageIcon;
-import javax.swing.UIManager;
+//import javax.swing.UIManager;
 import lookout.MainFrame;
 
 public class SettingsData implements Serializable{
@@ -116,6 +116,7 @@ public class SettingsData implements Serializable{
         product_once = true;
         vacuum_base = false;
     }
+    
     public ImageIcon getImage4Button(String imageName){
         String imgLocation =  "buttons/" + imageName + ".png";
         URL imageURL = MainFrame.class.getResource(imgLocation);
@@ -144,7 +145,7 @@ public class SettingsData implements Serializable{
     }
     
     public String getSizedPath(boolean sized){
-        String p = "";
+        String p;// = "";
         if (sizeFactor<1.4f){
             p = "96/";
         }else if (sizeFactor<1.97f){
@@ -165,73 +166,94 @@ public class SettingsData implements Serializable{
     public float getSizeFactor(){
         return sizeFactor;
     }
+    
     public int getSizedValue(int in){
         return (int)((float)in*sizeFactor);
     }
-       
     
     private Rectangle checkBounds(Rectangle r){
         if (r.x<0 || r.x>Toolkit.getDefaultToolkit().getScreenSize().getWidth()) r.x=0;
         if (r.y<0 || r.y>Toolkit.getDefaultToolkit().getScreenSize().getHeight()) r.y=0;
+        
         return r;
     }
+    
     public boolean isVacuum(){
         return vacuum_base;
     }
+    
     public void setVacuum(boolean v){
         vacuum_base = v;
     }
+    
     public boolean isProductOnce(){
         return product_once;
     }
+    
     public void setProductOnce(boolean v){
         product_once = v;
     }
+    
     public int getDiaryMenuSplit(){
         return diary_menu_split;
     }
+    
     public void setDiaryMenuSplit(int v){
         diary_menu_split = v;
     }
+    
     public boolean isCoefsLocked(){
         return lockCoefs;
     }
+    
     public void setCoefsLocked(boolean v){
         lockCoefs = v;
     }
+    
     public Rectangle getDiaryBounds(){
         return checkBounds(diary);
     }
+    
     public void setDiaryBounds(Rectangle v){
         diary = v;
     }
+    
     public int getDiarySplit(){
         return diary_split;
     }
+    
     public void setDiarySplit(int v){
         diary_split = v;
     }
+    
     public int getDiaryDateSize(){
         return diary_date_size;
     }
+    
     public void setDiaryDateSize(int v){
         diary_date_size = v;
     }
+    
     public int getDiaryCommSize(){
         return diary_comm_size;
     }
+    
     public void setDiaryCommSize(int v){
         diary_comm_size = v;
     }
+    
     public int getDiaryRestSize(){
         return diary_rest_size;
     }
+    
     public void setDiaryRestSize(int v){
         diary_rest_size = v;
     }
+    
     public boolean isCarbRatio(){
         return carbRatio;
     }
+    
     public void setCarbRatio(boolean v){
         carbRatio = v;
     }
@@ -239,81 +261,107 @@ public class SettingsData implements Serializable{
     public int getRoundLimit(){
         return roundLimit;
     }
+    
     public void setRoundLimit(int v){
         roundLimit = v;
     }
+    
     public boolean isCalcOUVbyK1(){
         return calcOUVbyK1;
     }
+    
     public void setCalcOUVbyK1(boolean v){
             calcOUVbyK1 = v;
     }
+    
     public int getSnackSize(){
         return snackSize;
     }
+    
     public void setSnackSize(int v){
         snackSize = v;
     }
+    
     public int getMenuMask(){
         return menuMask;
     }
+    
     public void setMenuMask(int v){
         menuMask = v;
     }
+    
     public boolean isUseSnack(){
         return snack;
     }
+    
     public void setUseSnack(boolean use){
         snack = use;
     }
+    
     public int getUser(){
         return user;
     }
+    
     public void setUser(int v){
         user = v;
     }
+    
     public int getProdRest(){
         return prodRest;
     }
+    
     public void setProdRest(int v){
         prodRest = v;
     }
+    
     public int getProdName(){
         return prodName;
     }
+    
     public void setProdName(int v){
         prodName = v;
     }
+    
     public int getGroupSize(){
         return groupSize;
     }
+    
     public void setGroupSize(int v){
         groupSize = v;
     }
+    
     public int getMenuRest(){
         return menuRest;
     }
+    
     public void setMenuRest(int v){
         menuRest = v;
     }
+    
     public int getMenuNameWidth(){
         return menuName;
     }
+    
     public void setMenuNameWidth(int w){
         menuName = w;
     }
+    
     public int getMenuWeightWidth(){
         return menuWeight;
     }
+    
     public void setMenuWeightWidth(int w){
         menuWeight = w;
     }
+    
     public int getMenuSize(){
         return menuSize;
     }
+    
     public void setMenuSize(int size){
         menuSize = size;
     }
+    
     /**
      * 
      * @return Возврашает два типа размера интерфейса программы
@@ -322,30 +370,39 @@ public class SettingsData implements Serializable{
     public int getSize(){
         return size;
     }
+    
     public void setSize(int size){
         this.size = size;
     }
+    
     public void setUseUsageGroup(int v){
         useUsageGroup = v;
     }
+    
     public int getUseUsageGroup(){
         return useUsageGroup;
     }
+    
     public int getUsageGroupCount(){
         return prods_count;
     }
+    
     public void setUsageGroupCount(int v){
         prods_count = v;
     }
+    
     public int getPrecision(){
         return precision;
     }
+    
     public void setPrecision(int prec){
         precision = prec;
     }
+    
     public Rectangle getMainBounds(){
         return checkBounds(main);
     }
+    
     public void setMainBounds(Rectangle rec){
         main = rec;
     }

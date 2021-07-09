@@ -80,7 +80,6 @@ public class Main{
      *                1.17 больше.
      */
     public static void setDefaultFontSize(float factor,int mode) {
-
         Set<Object> keySet = UIManager.getLookAndFeelDefaults().keySet();
         Object[] keys = keySet.toArray(new Object[keySet.size()]);
 
@@ -92,7 +91,6 @@ public class Main{
                             (mode==4?1.17f:1f));
                     UIManager.put(key, font);
                 }
-
             }
         }
     }
@@ -121,7 +119,9 @@ public class Main{
         //Прежде всего проверяем версию java
         String ver = System.getProperty("java.version");
         String [] dig = ver.replace('.','=').split("=");
-        int verI = (new Integer(dig[0]))*10 + new Integer(dig[1]);
+        int verI = (Integer.parseInt(dig[0]))*10 + Integer.parseInt(dig[1]);
+        // TODO Исправить контроль версии
+        System.out.println(verI);
         if (verI<17){
             JOptionPane.showMessageDialog(null,
                     "Запуск программы невозможен!\n\n"+
@@ -187,8 +187,9 @@ public class Main{
         if (!flag){
             createGUIwithoutTray();
         }
-}
-private static void createGUIwithoutTray(){
+    }
+    
+    private static void createGUIwithoutTray(){
         w = new JWindow();
         w.setSize(new Dimension(
                 ProgramSettings.getInstance().getIn().getSizedValue(250),
@@ -206,51 +207,51 @@ private static void createGUIwithoutTray(){
         mf = new MainFrame();
         mf.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         mf.addWindowListener(new WindowAdapter(){
-               @Override
-               public void windowClosing(WindowEvent e){
-                   //System.out.println("closing")  ;
-                   Stack.setAlive(false);
-                     mf.setVisible(false);
-                     mf.storeSettings();
-                     mf.dispose();
-                     if (report!=null && !report.isVisible()){
-                        //Форма вывода невидна, закрываем ее
-                        report.stopThread();
-                        report.dispose();
-                        System.exit(0);
-                    }else if (report!=null){
-                        report.stopThread();
-                    }
-                     
-               }
-               @Override
-               public void windowDeactivated(WindowEvent e){
-                   if (!mf.isVisible()){
-                       //System.out.println("deactivated") ;
-                       Stack.setAlive(false);
-                       mf.dispose();
-                       if (report!=null && !report.isVisible()){
-                            //Форма вывода невидна, закрываем ее
-                            report.stopThread();
-                            report.dispose();
-                            System.exit(0);
-                        }else if (report!=null){
-                            report.stopThread();
-                        }
-                   }
-               }
-            });
+            @Override
+            public void windowClosing(WindowEvent e){
+                //System.out.println("closing")  ;
+                Stack.setAlive(false);
+                  mf.setVisible(false);
+                  mf.storeSettings();
+                  mf.dispose();
+                  if (report!=null && !report.isVisible()){
+                     //Форма вывода невидна, закрываем ее
+                     report.stopThread();
+                     report.dispose();
+                     System.exit(0);
+                 }else if (report!=null){
+                     report.stopThread();
+                 }
+
+            }
+            
+            @Override
+            public void windowDeactivated(WindowEvent e){
+                if (!mf.isVisible()){
+                    //System.out.println("deactivated") ;
+                    Stack.setAlive(false);
+                    mf.dispose();
+                    if (report!=null && !report.isVisible()){
+                         //Форма вывода невидна, закрываем ее
+                         report.stopThread();
+                         report.dispose();
+                         System.exit(0);
+                     }else if (report!=null){
+                         report.stopThread();
+                     }
+                }
+            }
+        });
         mf.setVisible(true);
-        
-           
         w.setVisible(false);
         w.dispose();
-   
-}
-private static boolean createGUIwithTray(){
+    }
+    
+    private static boolean createGUIwithTray(){
         //Check the SystemTray support
         if (!SystemTray.isSupported()) {
             System.out.println("SystemTray is not supported");
+            
             return false;
         }
         // Create a popup menu components
@@ -263,24 +264,23 @@ private static boolean createGUIwithTray(){
         popup.addSeparator();
         popup.add(exitItem);
 
-        trayIcon =
-                new TrayIcon(createImage(true),
-                "DiaCalcJ",
-                popup);
+        trayIcon =new TrayIcon(createImage(true),
+                                "DiaCalcJ",
+                                popup);
         final SystemTray tray = SystemTray.getSystemTray();
 
         trayIcon.setImageAutoSize(true);
-
 
         try {
             tray.add(trayIcon);
         } catch (AWTException e) {
             e.printStackTrace();
+            
             return false;
         }
 
         trayIcon.addMouseListener(new MouseAdapter(){
-                @Override
+            @Override
             public void mouseClicked(MouseEvent e){
                 if (SwingUtilities.isLeftMouseButton(e)){
                     showGUI();
@@ -289,14 +289,14 @@ private static boolean createGUIwithTray(){
         });
 
         showItem.addActionListener(new ActionListener() {
-                @Override
+            @Override
             public void actionPerformed(ActionEvent e) {
                 showGUI();
             }
         });
 
         exitItem.addActionListener(new ActionListener() {
-                @Override
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if (mf!=null){
                     if (mf.isVisible()){
@@ -322,6 +322,7 @@ private static boolean createGUIwithTray(){
 
         return true;
     }
+    
     private static void showGUI(){
         if (mf==null){
             showItem.setLabel("Скрыть");
@@ -339,51 +340,45 @@ private static boolean createGUIwithTray(){
                 @Override
                 public void windowOpened(WindowEvent e){
                     if (w!=null){
-
-                  new DBVersionCorrect(w);
-                  mf = new MainFrame();
-                  mf.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-                  mf.addPropertyChangeListener(new PropertyChangeListener(){
-                      @Override
-                      public void propertyChange(PropertyChangeEvent e){
-                        if (e.getPropertyName().equals(MainFrame.USER_CHANGED)){
-                            trayIcon.setToolTip(
-                                    "DiaCalcJ - "+((User)e.getNewValue()).getName()
-                                    );
-                        }
-                      }
-                  });
-                  trayIcon.setToolTip(
-                                    "DiaCalcJ - "+mf.getUser().getName()
-                                    );
-                  mf.addWindowListener(new WindowAdapter(){
-                    @Override
-                    public void windowClosing(WindowEvent e){
-                        SwingUtilities.invokeLater(new Runnable(){
+                        new DBVersionCorrect(w);
+                        mf = new MainFrame();
+                        mf.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                        mf.addPropertyChangeListener(new PropertyChangeListener(){
                             @Override
-                            public void run(){
-                                mf.setVisible(false);
-                                mf.hideChildren();
-                                showItem.setLabel("Показать");
-                                mf.storeSettings();
+                            public void propertyChange(PropertyChangeEvent e){
+                                if (e.getPropertyName().equals(MainFrame.USER_CHANGED)){
+                                    trayIcon.setToolTip("DiaCalcJ - "+((User)e.getNewValue()).getName());
+                                }
                             }
                         });
-                        //System.out.println("testing2");
+                        trayIcon.setToolTip("DiaCalcJ - "+mf.getUser().getName());
+                        mf.addWindowListener(new WindowAdapter(){
+                            @Override
+                            public void windowClosing(WindowEvent e){
+                                SwingUtilities.invokeLater(new Runnable(){
+                                    @Override
+                                    public void run(){
+                                        mf.setVisible(false);
+                                        mf.hideChildren();
+                                        showItem.setLabel("Показать");
+                                        mf.storeSettings();
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void windowDeactivated(WindowEvent e){
+                                if (!mf.isVisible()){
+                                    showItem.setLabel("Показать");
+                                }
+                            }
+                        });
+                        mf.setVisible(true);
+                        w.setVisible(false);
+                        w.dispose();
                     }
-                    @Override
-                    public void windowDeactivated(WindowEvent e){
-                        if (!mf.isVisible()){
-                            showItem.setLabel("Показать");
-                        }
-                        //System.out.println("testing");
-                    }
-                  });
-                  mf.setVisible(true);
-                  w.setVisible(false);
-                  w.dispose();
-              }
                 }
-        });
+            });
         }else{
             if (mf.isVisible()){
                 SwingUtilities.invokeLater(new Runnable(){
@@ -438,8 +433,10 @@ private static boolean createGUIwithTray(){
             g2.fill(new Ellipse2D.Float(9f, 4f, 8f, 8f));
         }
         g2.dispose();
+        
         return i;
     }
+    
     protected static ImageIcon createImageIcon(String path) {
         java.net.URL imgURL = MainFrame.class.getResource(path);
         if (imgURL != null) {
@@ -449,6 +446,4 @@ private static boolean createGUIwithTray(){
             return null;
         }
     }
-
-
 }

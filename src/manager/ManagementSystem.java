@@ -51,44 +51,42 @@ public class ManagementSystem {
 
     private static ManagementSystem instance = null;
     
-     private ManagementSystem() {
+    private ManagementSystem() {
+        try {
+            Class.forName("org.sqlite.JDBC");
 
-    try {
+            String url = "jdbc:sqlite:"+System.getProperty("user.dir") + 
+                    System.getProperty("file.separator") + "base.sqlite";
+            //String url = "jdbc:sqlite:base.sqlite";
 
-      Class.forName("org.sqlite.JDBC");
-      
-      String url = "jdbc:sqlite:"+System.getProperty("user.dir")+System.getProperty("file.separator")+"base.sqlite";
-      //String url = "jdbc:sqlite:base.sqlite";
+            if (ProgramSettings.getInstance().getIn().isVacuum()){
+                con = DriverManager.getConnection(url);
+                Statement st = con.createStatement();
+                st.execute("VACUUM;");
+                st.close();
+                con.close();
+                ProgramSettings.getInstance().getIn().setVacuum(false);
+            }
 
-      if (ProgramSettings.getInstance().getIn().isVacuum()){
-          con = DriverManager.getConnection(url);
-          Statement st = con.createStatement();
-          st.execute("VACUUM;");
-          st.close();
-          con.close();
-          ProgramSettings.getInstance().getIn().setVacuum(false);
-      }
+            con = DriverManager.getConnection(url);
+            con.setAutoCommit(false);
 
-      con = DriverManager.getConnection(url);
-      con.setAutoCommit(false);
-     
-    } catch (ClassNotFoundException e1) {
-         e1.printStackTrace();
-    } catch (SQLException e) {
-         e.printStackTrace();
+        } catch (ClassNotFoundException e1) {
+            e1.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-  }
-     
-  public static synchronized ManagementSystem getInstance(){
-    if (instance == null) {
-      instance = new ManagementSystem();
+    public static synchronized ManagementSystem getInstance(){
+        if (instance == null) {
+          instance = new ManagementSystem();
+        }
+        
+        return instance;
     }
-    return instance;
-  }
    
- public Connection getConnection(){
-     return con;
- } 
- 
+    public Connection getConnection(){
+        return con;
+    } 
 }

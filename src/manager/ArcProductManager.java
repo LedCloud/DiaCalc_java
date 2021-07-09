@@ -53,7 +53,7 @@ import products.ProductInBase;
 
 
 public class ArcProductManager {
-    private ManagementSystem manager;
+    private final ManagementSystem manager;
     private int lastInsertedId = -1;
     
     public ArcProductManager(){
@@ -63,74 +63,78 @@ public class ArcProductManager {
 
 
     public Collection<ProductInBase> getAllProducts(){
-           Collection products = new ArrayList();
+        Collection products = new ArrayList();
 
-     try {
+        try {
+            Statement stmt = manager.getConnection().createStatement();
+            ResultSet rs = stmt.executeQuery( "SELECT name, prot, fats, carb, gi, weight, " +
+                "idProd, compl, idGroup FROM arcproducts ORDER BY idGroup, name;");
 
-        // PreparedStatement
-         Statement stmt = manager.getConnection().createStatement();
-         ResultSet rs = stmt.executeQuery( "SELECT name, prot, fats, carb, gi, weight, " +
-        "idProd, compl, idGroup FROM arcproducts ORDER BY idGroup, name;");
+            while(rs.next()) {
+                products.add(
+                        new ProductInBase(  rs.getString("name"),
+                                            rs.getFloat("prot"),
+                                            rs.getFloat("fats"),
+                                            rs.getFloat("carb"),
+                                            rs.getInt("gi"),
+                                            rs.getFloat("weight"),
+                                            rs.getInt("idProd"),
+                                            rs.getInt("compl")!=0,
+                                            rs.getInt("idGroup"),
+                                            0));
+            }
 
-          while(rs.next()) {
-        products.add(new ProductInBase(rs.getString("name"),rs.getFloat("prot"),
-          rs.getFloat("fats"),rs.getFloat("carb"),rs.getInt("gi"),
-          rs.getFloat("weight"),rs.getInt("idProd"),rs.getInt("compl")!=0,
-          rs.getInt("idGroup"),0));
-          }
+            rs.close();
+            stmt.close();
+            manager.getConnection().commit();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-        rs.close();
-        stmt.close();
-        manager.getConnection().commit();
-
-    }
-      catch (SQLException e) {
-      e.printStackTrace();
-    }
-
-    return products;
-
+        return products;
     }
 
     public Collection getProductsFromGroup(int idGroup){
-
         Collection<ProductInBase> products = new ArrayList();
 
-     try {
-         PreparedStatement stmt = manager.getConnection().prepareStatement(
-                "SELECT name, prot, fats, carb, gi, weight, " +
-                "idProd, compl, idGroup FROM arcproducts " +
-                "WHERE idGroup=? ORDER BY name;");
-             stmt.setInt(1, idGroup);
+        try {
+            PreparedStatement stmt = manager.getConnection().prepareStatement(
+                   "SELECT name, prot, fats, carb, gi, weight, " +
+                   "idProd, compl, idGroup FROM arcproducts " +
+                   "WHERE idGroup=? ORDER BY name;");
+                stmt.setInt(1, idGroup);
 
+            ResultSet rs = stmt.executeQuery();
 
-         ResultSet rs = stmt.executeQuery();
+            int i=0;
+            while(rs.next()) {
+                if (idGroup==0) i++;
+                products.add( new ProductInBase(rs.getString("name"),
+                                                rs.getFloat("prot"),
+                                                rs.getFloat("fats"),
+                                                rs.getFloat("carb"),
+                                                rs.getInt("gi"),
+                                                rs.getFloat("weight"),
+                                                rs.getInt("idProd"),
+                                                rs.getInt("compl")!=0,
+                                                rs.getInt("idGroup"),
+                                                0));
+            }
 
+            rs.close();
+            stmt.close();
 
-        int i=0;
-        while(rs.next()) {
-            if (idGroup==0) i++;
-            products.add( new ProductInBase(rs.getString("name"),
-                    rs.getFloat("prot"),rs.getFloat("fats"),rs.getFloat("carb"),
-                    rs.getInt("gi"),rs.getFloat("weight"),rs.getInt("idProd"),
-                    rs.getInt("compl")!=0,rs.getInt("idGroup"),0));
+            manager.getConnection().commit();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-        rs.close();
-        stmt.close();
-
-        manager.getConnection().commit();
-
-      } catch (SQLException e) {
-      e.printStackTrace();
+        return products;
     }
 
-    return products;
-    }
-
-
-
-   public Collection addProdInBase(ProductInBase prod){
+    public Collection addProdInBase(ProductInBase prod){
        try {
             PreparedStatement stmt = manager.getConnection().prepareStatement(
             "INSERT INTO arcproducts "+
@@ -145,7 +149,6 @@ public class ArcProductManager {
             stmt.setFloat(6, prod.getWeight());
             stmt.setInt(7, prod.isComplex()?1:0);
             stmt.setInt(8, prod.getOwner());
-
 
             stmt.executeUpdate();
 
@@ -163,9 +166,10 @@ public class ArcProductManager {
         }
 
         return getProductsFromGroup(prod.getOwner());
-   }
-   public Collection addCollectionProducts(Collection<ProductInBase> prods, int grId){
-       try {
+    }
+    
+    public Collection addCollectionProducts(Collection<ProductInBase> prods, int grId){
+        try {
             PreparedStatement stmt = manager.getConnection().prepareStatement(
             "INSERT INTO arcproducts "+
             "(name, prot, fats, carb, gi, weight, compl, idGroup) "+
@@ -187,45 +191,46 @@ public class ArcProductManager {
 
             stmt.close();
             manager.getConnection().commit();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        
         return getProductsFromGroup(grId);
-
-   }
-   public Collection updateProductInBase(ProductInBase prod){
+    }
+    
+    public Collection updateProductInBase(ProductInBase prod){
         try {
-        PreparedStatement
-           stmt = manager.getConnection().prepareStatement(
-        "UPDATE arcproducts SET name=?, prot=?, fats=?, carb=?, gi=?, weight=?, " +
-        "compl=?, idGroup=? " +
-        "WHERE idProd=?;");
+            PreparedStatement
+               stmt = manager.getConnection().prepareStatement(
+            "UPDATE arcproducts SET name=?, prot=?, fats=?, carb=?, gi=?, weight=?, " +
+            "compl=?, idGroup=? " +
+            "WHERE idProd=?;");
 
-        stmt.setString(1, prod.getName());
-        stmt.setFloat(2, prod.getProt());
-        stmt.setFloat(3, prod.getFat());
-        stmt.setFloat(4, prod.getCarb());
-        stmt.setInt(5, prod.getGi());
-        stmt.setFloat(6, prod.getWeight());
-        stmt.setInt(7, prod.isComplex()?1:0);
-        stmt.setInt(8, prod.getOwner());
+            stmt.setString(1, prod.getName());
+            stmt.setFloat(2, prod.getProt());
+            stmt.setFloat(3, prod.getFat());
+            stmt.setFloat(4, prod.getCarb());
+            stmt.setInt(5, prod.getGi());
+            stmt.setFloat(6, prod.getWeight());
+            stmt.setInt(7, prod.isComplex()?1:0);
+            stmt.setInt(8, prod.getOwner());
 
-        stmt.setInt(9, prod.getId());
+            stmt.setInt(9, prod.getId());
 
-        stmt.executeUpdate();
+            stmt.executeUpdate();
 
-        stmt.close();
-        manager.getConnection().commit();
+            stmt.close();
+            manager.getConnection().commit();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        
         return getProductsFromGroup(prod.getOwner());
    }
 
-   public Collection deleteProductFromBase(ProductInBase prod){
-       try {
+    public Collection deleteProductFromBase(ProductInBase prod){
+        try {
             PreparedStatement stmt = manager.getConnection().prepareStatement(
             "DELETE FROM arcproducts " +
             "WHERE idProd=?;");
@@ -242,17 +247,18 @@ public class ArcProductManager {
         }
 
         return getProductsFromGroup(prod.getOwner());
-   }
-   public int getLastInsertedId(){
-       return lastInsertedId;
-   }
+    }
+    
+    public int getLastInsertedId(){
+        return lastInsertedId;
+    }
 
-   public void clearArchive(){
-       try {
-           Statement stmt = manager.getConnection().createStatement();
+    public void clearArchive(){
+        try {
+            Statement stmt = manager.getConnection().createStatement();
 
             stmt.execute("DELETE FROM arcproducts " +
-            "WHERE compl=1;");
+                "WHERE compl=1;");
             stmt.close();
 
             Statement stmt2 = manager.getConnection().createStatement();
@@ -272,9 +278,8 @@ public class ArcProductManager {
             stmt3.close();
             stmt2.close();
             manager.getConnection().commit();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-   }
+    }
 }

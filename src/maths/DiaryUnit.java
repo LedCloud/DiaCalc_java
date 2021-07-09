@@ -50,7 +50,7 @@ public class DiaryUnit {
     private String comment;
     private float sh1;
     private float sh2;
-    private int type;
+    private final int type;
     private int owner;
     private Factors fcs;
     private float dose;
@@ -64,6 +64,7 @@ public class DiaryUnit {
         type = COMMENT;
         this.owner = owner;
     }
+    
     //create sugar
     public DiaryUnit(int id, long time, String comment, float sh, int owner){
         this.id = id;
@@ -73,6 +74,7 @@ public class DiaryUnit {
         type = SUGAR;
         this.owner = owner;
     }
+    
     //create menu
     public DiaryUnit(int id,long time, String comment, float sh1, float sh2,
             Factors fc, float dose, int owner, ProductW prod){
@@ -92,30 +94,39 @@ public class DiaryUnit {
     public int getOwner(){
         return owner;
     }
+    
     public int getId(){
         return id;
     }
+    
     public String getComment(){
         return comment;
     }
+    
     public int getType(){
         return type;
     }
+    
     public ProductW getProduct(){
         return type==MENU? prod: null;
     }
+    
     public Factors getFactors(){
         return type==MENU? fcs : null;
     }
+    
     public float getSh1(){
         return (type==SUGAR || type==MENU ) ? sh1: null;
     }
+    
     public float getSh2(){
         return type==MENU? sh2 : null;
     }
+    
     public float getDose(){
         return type==MENU? dose : null;
     }
+    
     public long getTime(){
         return time;
     }
@@ -123,27 +134,35 @@ public class DiaryUnit {
     public void setProduct(ProductW prod){
         this.prod = prod;
     }
+    
     public void setTime(long v){
         time = v;
     }
+    
     public void setOwner(int v){
         owner = v;
     }
+    
     public void setId(int v){
         id = v;
     }
+    
     public void setComment(String v){
         comment = v;
     }
+    
     public void setFactors(Factors v){
         fcs = v;
     }
+    
     public void setSh1(float v){
         sh1 = v;
     }
+    
     public void setSh2(float v){
         sh2 = v;
     }
+    
     public void setDose(float v){
         dose = v;
     }

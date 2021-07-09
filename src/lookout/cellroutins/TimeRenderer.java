@@ -56,18 +56,20 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 
 public class TimeRenderer  extends DefaultTableCellRenderer{
-    private JTextField fld = new JTextField();
-    private ProgramSettings settings;
-    private Border selectedBorder=null;
-    private Border unselectedBorder=null;
-    private Border emptyBorder = BorderFactory.createEmptyBorder();
-    private SimpleDateFormat format;
+    private final JTextField fld = new JTextField();
+    private final ProgramSettings settings;
+    private Border selectedBorder = null;
+    private Border unselectedBorder = null;
+    private final Border emptyBorder = BorderFactory.createEmptyBorder();
+    private final SimpleDateFormat format;
+    
     public TimeRenderer(String pattern){
         settings = ProgramSettings.getInstance();
         fld.setHorizontalAlignment(JLabel.RIGHT);
         fld.setEditable(false);
         format = new SimpleDateFormat(pattern);
     }
+    
     @Override
     public Component getTableCellRendererComponent(
                             JTable table, Object value,
@@ -102,6 +104,6 @@ public class TimeRenderer  extends DefaultTableCellRenderer{
             fld.setBorder(emptyBorder);
             }
 
-     return fld;
+        return fld;
     }
 }

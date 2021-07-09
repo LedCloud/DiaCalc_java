@@ -46,7 +46,7 @@ import javax.swing.*;
 
 public class DBVersionCorrect {
     private final static int VERSION = 7;
-    private ManagementSystem manager;
+    private final ManagementSystem manager;
     private int version = 0;
 
     public DBVersionCorrect(JWindow owner){
@@ -84,15 +84,15 @@ public class DBVersionCorrect {
                 rs_ver.close();
             }
 
-
             rs.close();
             stmt.close();
             manager.getConnection().commit();
 
         }
-            catch (SQLException e) {
+        catch (SQLException e) {
             e.printStackTrace();
         }
+        
         return v;
     }
 
@@ -152,7 +152,7 @@ public class DBVersionCorrect {
 
             version = 1;
         }
-            catch (SQLException e) {
+        catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -181,7 +181,7 @@ public class DBVersionCorrect {
             manager.getConnection().commit();
             version = 2;
         }
-            catch (SQLException e) {
+        catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -208,7 +208,7 @@ public class DBVersionCorrect {
             manager.getConnection().commit();
             version = 3;
         }
-            catch (SQLException e) {
+        catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -222,7 +222,7 @@ public class DBVersionCorrect {
             manager.getConnection().commit();
             version = 4;
         }
-            catch (SQLException e) {
+        catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -242,7 +242,7 @@ public class DBVersionCorrect {
             manager.getConnection().commit();
             version = 5;
         }
-            catch (SQLException e) {
+        catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -259,7 +259,7 @@ public class DBVersionCorrect {
             manager.getConnection().commit();
             version = 6;
         }
-            catch (SQLException e) {
+        catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -295,7 +295,7 @@ public class DBVersionCorrect {
             manager.getConnection().commit();
             version = 7;
         }
-            catch (SQLException e) {
+        catch (SQLException e) {
             e.printStackTrace();
         }
     }

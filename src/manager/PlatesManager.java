@@ -55,16 +55,14 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 
 public class PlatesManager {
-    private ManagementSystem manager = ManagementSystem.getInstance();
-
-    private Vector<Plate> plates;
+    private final ManagementSystem manager = ManagementSystem.getInstance();
+    private ArrayList<Plate> plates;
 
     public PlatesManager(){
-
     }
 
-    public Vector<Plate> getPlates(){
-        plates = new Vector();
+    public ArrayList<Plate> getPlates(){
+        plates = new ArrayList();
         try{
             Statement stmt = manager.getConnection().createStatement();
             ResultSet rs = stmt.executeQuery("SELECT idPlate, name, weight " +
@@ -78,11 +76,14 @@ public class PlatesManager {
 
             manager.getConnection().commit();
 
-        } catch (SQLException e) {
-        e.printStackTrace();
         }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
         return plates;
     }
+    
     public int addPlate(Plate plate){
         int idadded = -1;
         try{
@@ -105,12 +106,14 @@ public class PlatesManager {
             stmt.close();
 
             manager.getConnection().commit();
-            
-        }catch(SQLException ex){
+        }
+        catch(SQLException ex){
             ex.printStackTrace();
         }
+        
         return idadded;
     }
+    
     public void deletePlate(Plate plate){
         try{
             PreparedStatement stmt = manager.getConnection().prepareStatement(
@@ -121,10 +124,12 @@ public class PlatesManager {
             stmt.close();
 
             manager.getConnection().commit();
-        } catch (SQLException e) {
-        e.printStackTrace();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
         }
     }
+    
     public void updatePlate(Plate plate){
         try{
             PreparedStatement stmt = manager.getConnection().prepareStatement(
@@ -138,11 +143,12 @@ public class PlatesManager {
             stmt.close();
 
             manager.getConnection().commit();
-        } catch (SQLException e) {
-        e.printStackTrace();
         }
-
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+    
     public BufferedImage getPict(int id){
         BufferedImage image = null;
         try{
@@ -159,67 +165,65 @@ public class PlatesManager {
                         ByteArrayInputStream bais = new ByteArrayInputStream(b);
                         image = ImageIO.read(bais);
                         bais.close();
-                    }catch(Exception e){}
+                    }
+                    catch(Exception e){}
                 }
-                
             }
             rs.close();
             stmt.close();
 
             manager.getConnection().commit();
         }
-         catch (SQLException e) {
+        catch (SQLException e) {
             e.printStackTrace();
         }
+        
         return image;
     }
+    
     public void setPict(int id,BufferedImage image){
-          if(image != null) {
+        if(image != null) {
             try{
-              ByteArrayOutputStream baos = new ByteArrayOutputStream(50000);
-              ImageIO.write(image, "jpg", baos);
-              byte[] buffer = baos.toByteArray();
-              baos.close();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream(50000);
+                ImageIO.write(image, "jpg", baos);
+                byte[] buffer = baos.toByteArray();
+                baos.close();
 
-              ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
+                ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
                     PreparedStatement stmt = manager.getConnection().prepareStatement(
-                        "UPDATE plates SET pict=? WHERE idPlate=?;"
-                        );
+                        "UPDATE plates SET pict=? WHERE idPlate=?;");
 
-                    stmt.setBytes(1, buffer);
-                    stmt.setInt(2, id);
-                    stmt.executeUpdate();
-                    stmt.close();
+                stmt.setBytes(1, buffer);
+                stmt.setInt(2, id);
+                stmt.executeUpdate();
+                stmt.close();
 
-                    manager.getConnection().commit();
-                
+                manager.getConnection().commit();
 
-              bais.close();
-            }catch(SQLException e){
+                bais.close();
+            }
+            catch(SQLException e){
                 e.printStackTrace();
             }
             catch(IOException ex){
                 ex.printStackTrace();
             }
-          }else{
-              try{
-                    PreparedStatement stmt = manager.getConnection().prepareStatement(
-                        "UPDATE plates SET pict=? WHERE idPlate=?;"
-                        );
+        }else{
+            try{
+                PreparedStatement stmt = manager.getConnection().prepareStatement(
+                    "UPDATE plates SET pict=? WHERE idPlate=?;");
 
-                    stmt.setBytes(1, null);
+                stmt.setBytes(1, null);
 
-                    stmt.setInt(2, id);
-                    stmt.executeUpdate();
-                    stmt.close();
+                stmt.setInt(2, id);
+                stmt.executeUpdate();
+                stmt.close();
 
-                    manager.getConnection().commit();
-              }catch (SQLException ex){
-                  ex.printStackTrace();
-              }
-                
-          }
-
-          
+                manager.getConnection().commit();
+            }
+            catch (SQLException ex){
+                ex.printStackTrace();
+            }
+        }
     }
 }

@@ -40,7 +40,7 @@ package maths;
  */
 
 import java.util.Collection;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.ArrayList;
 import java.text.SimpleDateFormat;
@@ -83,17 +83,15 @@ public class TimedCoefsSet {//3600000
     public final static long ELEVEN_PM = BASE + HOUR*23 + DELTA;
    
 
-    private long [] hours = {
+    private final long [] hours = {
         ZERO,ONE,TWO,TREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE,TEN,
         ELEVEN,TWELVE,ONE_PM,TWO_PM,TREE_PM,FOUR_PM,FIVE_PM,SIX_PM,SEVEN_PM,
         EIGHT_PM,NINE_PM,TEN_PM,ELEVEN_PM};
-    
-
-
-    private Vector<CoefsSet>        cfs;
+   
+    private ArrayList<CoefsSet>    cfs;
     
     public TimedCoefsSet(Collection<CoefsSet> col){
-        cfs = new Vector(col);
+        cfs = new ArrayList(col);
     }
 
     public Collection<CoefsSet> getTimedCoefs(){
@@ -119,7 +117,7 @@ public class TimedCoefsSet {//3600000
                     CoefsSet.TIME) );
             }
         }
-        Vector<CoefsSet> arr = new Vector(result);
+        ArrayList<CoefsSet> arr = new ArrayList(result);
         Collection<CoefsSet> res = new ArrayList();
         for (int i=6;i<24;i++){
             res.add(arr.get(i));
@@ -142,7 +140,7 @@ public class TimedCoefsSet {//3600000
                 break;
             }
         }
-        if (res==null) res = cfs.lastElement();
+        if (res==null) res = cfs.get(cfs.size()-1);//.lastElement();
         return res;
     }
 
@@ -154,7 +152,7 @@ public class TimedCoefsSet {//3600000
                 break;
             }
         }
-        if (res==null) res = cfs.firstElement();
+        if (res==null) res = cfs.get(0);//.firstElement();
         return res;
     }
 }

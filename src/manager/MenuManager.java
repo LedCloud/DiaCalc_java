@@ -29,7 +29,7 @@
  *
  * Contributor(s):
  *
- * Portions Copyrighted 2009 Toporov Konstantin.
+ * Portions Copyrighted 2009-2018 Toporov Konstantin.
  */
 
 package manager;
@@ -51,75 +51,79 @@ import products.ProductW;
 
 
 public class MenuManager {
- private ManagementSystem manager;
- private int idUser;
- private String tableName;
- public final static int MENU_TABLE = 0;
- public final static int SNACK_TABLE = 1;
- private final static String menu_table = "menu";
- private final static String snack_table = "snack";
+    private final ManagementSystem manager = ManagementSystem.getInstance();
+    private int idUser;
+    private String tableName;
+    public final static int MENU_TABLE = 0;
+    public final static int SNACK_TABLE = 1;
+    private final static String MENU_TABLE_NAME = "menu";
+    private final static String SNACK_TABLE_NAME = "snack";
  
     public MenuManager(int idUser,int table){
         //Тут надо иницировать соединение
-        manager = ManagementSystem.getInstance();
+        //manager = ManagementSystem.getInstance();
         this.idUser = idUser;
         switch (table){
-            case 0: tableName = menu_table; break;
-            case 1: tableName = snack_table; break;
+            case 0: tableName = MENU_TABLE_NAME; break;
+            case 1: tableName = SNACK_TABLE_NAME; break;
         }
     }
     
     public Collection getMenu(){
         Collection products = new ArrayList();
         
-       try {   
-         
-         PreparedStatement stmt = manager.getConnection().prepareStatement(
-            "SELECT Name, Prot, Fat, Carb, Gi, Weight, " +
-            "idProd FROM " + tableName + " WHERE idUser=? ORDER BY Name;");
-         stmt.setInt(1, idUser);
-         ResultSet rs = stmt.executeQuery();
-         
-         while(rs.next()) {
-              products.add( new ProductInMenu(rs.getString("Name"),
-                      rs.getFloat("Prot"),rs.getFloat("Fat"),rs.getFloat("Carb"),
-                      rs.getInt("Gi"),rs.getFloat("Weight"), rs.getInt("idProd")) );
-         }
+        try {   
+            PreparedStatement stmt = manager.getConnection().prepareStatement(
+                "SELECT Name, Prot, Fat, Carb, Gi, Weight, " +
+                "idProd FROM " + tableName + " WHERE idUser=? ORDER BY Name;");
+            stmt.setInt(1, idUser);
+            ResultSet rs = stmt.executeQuery();
 
-        rs.close();
-        stmt.close();
-        manager.getConnection().commit();
-       
-     } catch (SQLException e) {
-      e.printStackTrace();
-    }
+            while(rs.next()) {
+                products.add(new ProductInMenu( rs.getString("Name"),
+                                                rs.getFloat("Prot"),
+                                                rs.getFloat("Fat"),
+                                                rs.getFloat("Carb"),
+                                                rs.getInt("Gi"),
+                                                rs.getFloat("Weight"), 
+                                                rs.getInt("idProd")));
+            }
+
+            rs.close();
+            stmt.close();
+            manager.getConnection().commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
         return products;
     }
     
     public Collection updateProd(ProductInMenu prod){
         try {
-        PreparedStatement 
-           stmt = manager.getConnection().prepareStatement(
-        "UPDATE " + tableName + " SET Weight=? " +
-        "WHERE idProd=?;");
+            PreparedStatement 
+               stmt = manager.getConnection().prepareStatement(
+                    "UPDATE " + tableName + " SET Weight=? " +
+                    "WHERE idProd=?;");
 
-        stmt.setFloat(1, prod.getWeight());
-        stmt.setInt(2, prod.getId());
+            stmt.setFloat(1, prod.getWeight());
+            stmt.setInt(2, prod.getId());
 
-        stmt.executeUpdate();
-        stmt.close();
-        manager.getConnection().commit();
+            stmt.executeUpdate();
+            stmt.close();
+            manager.getConnection().commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        
         return getMenu();
     }
     
     public Collection deleteProd(ProductInMenu prod){
         try {
             PreparedStatement stmt = manager.getConnection().prepareStatement(
-            "DELETE FROM " + tableName + 
-            " WHERE idProd=?;");
+                "DELETE FROM " + tableName + 
+                " WHERE idProd=?;");
 
             stmt.setInt(1, prod.getId());
 
@@ -129,30 +133,31 @@ public class MenuManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        
         return getMenu();
     }
     
     public Collection flush(){
         try {
-        PreparedStatement stmt = manager.getConnection().prepareStatement(
-            "DELETE FROM " + tableName + " WHERE idUser=?;");
-        stmt.setInt(1, idUser);
-        stmt.executeUpdate();
-        stmt.close();
-        manager.getConnection().commit();
-        
+            PreparedStatement stmt = manager.getConnection().prepareStatement(
+                "DELETE FROM " + tableName + " WHERE idUser=?;");
+            stmt.setInt(1, idUser);
+            stmt.executeUpdate();
+            stmt.close();
+            manager.getConnection().commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        
         return getMenu();
     }
     
     public Collection addProd(ProductW prod){
         try{
             PreparedStatement stmt = manager.getConnection().prepareStatement(
-            "INSERT INTO " + tableName + 
-            " (Name, Prot, Fat, Carb, Gi, Weight, idUser) "+
-            "VALUES (?, ?, ?, ?, ?, ?, ?);");
+                "INSERT INTO " + tableName + 
+                " (Name, Prot, Fat, Carb, Gi, Weight, idUser) "+
+                "VALUES (?, ?, ?, ?, ?, ?, ?);");
 
             stmt.setString(1, prod.getName());
             stmt.setFloat(2, prod.getProt());
@@ -161,7 +166,6 @@ public class MenuManager {
             stmt.setInt(5, prod.getGi());
             stmt.setFloat(6, prod.getWeight());
             stmt.setInt(7, idUser);
-            
 
             stmt.executeUpdate();
 
@@ -171,6 +175,7 @@ public class MenuManager {
         }catch (SQLException ex){
             ex.printStackTrace();
         }
+        
         return getMenu();
     }
 }

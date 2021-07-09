@@ -53,11 +53,10 @@ import products.ProductW;
 import maths.Sugar;
 
 public class UsersManager {
-    private ManagementSystem manager;
+    private final ManagementSystem manager =  ManagementSystem.getInstance();
     private Collection users;
     
     public UsersManager(){
-        manager =  ManagementSystem.getInstance();
         loadUsers();
         if (users.isEmpty()) users.add(new User());//Должен существовать хотя бы один
         //пользователь
@@ -66,48 +65,64 @@ public class UsersManager {
     private void loadUsers(){
         users = new ArrayList();
         try {   
-         Statement stmt = manager.getConnection().createStatement();
-         ResultSet rs = stmt.executeQuery( "SELECT * FROM users ORDER BY idUser;");
+            Statement stmt = manager.getConnection().createStatement();
+            ResultSet rs = stmt.executeQuery( "SELECT * FROM users ORDER BY idUser;");
                  
-          while(rs.next()) {
-            Factors fcs = new Factors(rs.getFloat("k1"),rs.getFloat("k2"),
-                      rs.getFloat("k3"),rs.getFloat("BE"));
-            ProductW prod = new ProductW("",rs.getFloat("prot"),rs.getFloat("fat"),
-                    rs.getFloat("carb"),rs.getInt("gi"),rs.getFloat("FoodWeight") );
-            
-            users.add(new User(rs.getInt("idUser"),rs.getString("name"),
-                    rs.getFloat("weight"),rs.getFloat("height"),
-                    rs.getInt("male")!=0,rs.getInt("calorLimit"),
-                    new Sugar(rs.getFloat("targetSh")),rs.getInt("direct")==1,
-                    rs.getInt("mmol")==1,rs.getInt("plasma")==1,
-                    prod, fcs, new Sugar(rs.getFloat("sh1")),
-                    new Sugar(rs.getFloat("sh2")),rs.getLong("time"),
-                    rs.getInt("timeSense")==1, rs.getFloat("OUVcoef"),
-                    rs.getLong("birthday"),
-                    new Sugar(rs.getFloat("lowSugar")),
-                    new Sugar(rs.getFloat("hiSugar"))));
-          }
+            while(rs.next()) {
+                Factors fcs = new Factors(  rs.getFloat("k1"),
+                                            rs.getFloat("k2"),
+                                            rs.getFloat("k3"),
+                                            rs.getFloat("BE"));
+                
+                ProductW prod = new ProductW("",
+                                            rs.getFloat("prot"),
+                                            rs.getFloat("fat"),
+                                            rs.getFloat("carb"),
+                                            rs.getInt("gi"),
+                                            rs.getFloat("FoodWeight"));
 
-        rs.close();
-        stmt.close();
-        manager.getConnection().commit();
-     }
+                users.add(new User( rs.getInt("idUser"),
+                                    rs.getString("name"),
+                                    rs.getFloat("weight"),
+                                    rs.getFloat("height"),
+                                    rs.getInt("male")!=0,
+                                    rs.getInt("calorLimit"),
+                                    new Sugar(rs.getFloat("targetSh")),
+                                    rs.getInt("direct")==1,
+                                    rs.getInt("mmol")==1,
+                                    rs.getInt("plasma")==1,
+                                    prod, 
+                                    fcs, 
+                                    new Sugar(rs.getFloat("sh1")),
+                                    new Sugar(rs.getFloat("sh2")),
+                                    rs.getLong("time"),
+                                    rs.getInt("timeSense")==1, 
+                                    rs.getFloat("OUVcoef"),
+                                    rs.getLong("birthday"),
+                                    new Sugar(rs.getFloat("lowSugar")),
+                                    new Sugar(rs.getFloat("hiSugar"))));
+            }
+
+            rs.close();
+            stmt.close();
+            manager.getConnection().commit();
+        }
         catch (SQLException e) {
-        e.printStackTrace();
-     }
-   }
+            e.printStackTrace();
+        }
+    }
     
-   public int addUser(User updateUser){
-       int newOneId = -1;
-       try{
+    public int addUser(User updateUser){
+        int newOneId = -1;
+        try{
             PreparedStatement stmt = manager.getConnection().prepareStatement(
-            "INSERT INTO users "+
-            "(name, weight, height, male, calorLimit, mmol, plasma, targetSh, " +
-                    "direct, BE, k1, k2, k3, sh1, sh2, prot, fat, carb, gi, " +
-                    "FoodWeight, time, timeSense, OUVcoef, birthday, lowSugar, hiSugar) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " +
-                    "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " +
-                    "?, ?, ?, ?, ?, ?);");
+                "INSERT INTO users "+
+                "(name, weight, height, male, calorLimit, mmol, plasma, targetSh, " +
+                        "direct, BE, k1, k2, k3, sh1, sh2, prot, fat, carb, gi, " +
+                        "FoodWeight, time, timeSense, OUVcoef, birthday, lowSugar, hiSugar) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " +
+                        "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, " +
+                        "?, ?, ?, ?, ?, ?);");
             
             stmt.setString(1, updateUser.getName());
             stmt.setFloat(2, updateUser.getWeight());
@@ -136,28 +151,28 @@ public class UsersManager {
             stmt.setFloat(25, updateUser.getLowSh().getValue());
             stmt.setFloat(26, updateUser.getHiSh().getValue());
             
-            
             stmt.executeUpdate();
             stmt.close();
            
-         Statement stmt2 = manager.getConnection().createStatement();
-         ResultSet rs = stmt2.executeQuery("SELECT last_insert_rowid() FROM users;");
-            
-         if (rs.next()) newOneId = rs.getInt(1);
-         stmt2.close();
+            Statement stmt2 = manager.getConnection().createStatement();
+            ResultSet rs = stmt2.executeQuery("SELECT last_insert_rowid() FROM users;");
 
-         manager.getConnection().commit();
-       }catch(SQLException ex) {
-           ex.printStackTrace();
-       }
-       loadUsers();
-       return newOneId;
+            if (rs.next()) newOneId = rs.getInt(1);
+            stmt2.close();
+            manager.getConnection().commit();
+        }
+        catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+        loadUsers();
+       
+        return newOneId;
    }
    
    public void updateUser(User updateUser){
        try {
             PreparedStatement stmt = manager.getConnection().prepareStatement(
-            "UPDATE users SET name=?, weight=?, height=?, male=?, " +
+                "UPDATE users SET name=?, weight=?, height=?, male=?, " +
                     "calorLimit=?, mmol=?, plasma=?, targetSh=?, direct=?, " +
                     "BE=?, k1=?, k2=?, k3=?, sh1=?, sh2=?, " +
                     "prot=?, fat=?, carb=?, gi=?, FoodWeight=?, " +
@@ -201,65 +216,67 @@ public class UsersManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-       loadUsers();
-   }
+        loadUsers();
+    }
    
-   public void deleteUser(User user){
-       if (users.size()>1){
-           try {
-            PreparedStatement stmt = manager.getConnection().prepareStatement(
-                    "DELETE FROM diary WHERE owner=?;");
-            stmt.setInt(1, user.getId());
-            stmt.executeUpdate();
+    public void deleteUser(User user){
+        if (users.size()>1){
+            try {
+                PreparedStatement stmt = manager.getConnection().prepareStatement(
+                        "DELETE FROM diary WHERE owner=?;");
+                stmt.setInt(1, user.getId());
+                stmt.executeUpdate();
 
-            stmt = manager.getConnection().prepareStatement(
-                    "DELETE FROM storedMenu WHERE idUser=?;");
-            stmt.setInt(1, user.getId());
-            stmt.executeUpdate();
+                stmt = manager.getConnection().prepareStatement(
+                        "DELETE FROM storedMenu WHERE idUser=?;");
+                stmt.setInt(1, user.getId());
+                stmt.executeUpdate();
 
-            stmt = manager.getConnection().prepareStatement(
-            "DELETE FROM coefSets " +
-            "WHERE idUser=?;");
-
-            stmt.setInt(1, user.getId());
-
-            stmt.executeUpdate();
-        
-            stmt = manager.getConnection().prepareStatement(
-            "DELETE FROM menu " +
-            "WHERE idUser=?;");
-
-            stmt.setInt(1, user.getId());
-
-            stmt.executeUpdate();
-        
-            stmt = manager.getConnection().prepareStatement(
-            "DELETE FROM snack " +
-            "WHERE idUser=?;");
-
-            stmt.setInt(1, user.getId());
-
-            stmt.executeUpdate();
-        
-            stmt = manager.getConnection().prepareStatement(
-                "DELETE FROM users " +
-                "WHERE idUser=?;");
+                stmt = manager.getConnection().prepareStatement(
+                    "DELETE FROM coefSets " +
+                    "WHERE idUser=?;");
 
                 stmt.setInt(1, user.getId());
 
-             stmt.executeUpdate();
-             stmt.close();
-             manager.getConnection().commit();
-          } catch (SQLException e) {
-            e.printStackTrace();
-          }   
-        loadUsers();
-       }
+                stmt.executeUpdate();
+
+                stmt = manager.getConnection().prepareStatement(
+                    "DELETE FROM menu " +
+                    "WHERE idUser=?;");
+
+                stmt.setInt(1, user.getId());
+
+                stmt.executeUpdate();
+
+                stmt = manager.getConnection().prepareStatement(
+                    "DELETE FROM snack " +
+                    "WHERE idUser=?;");
+
+                stmt.setInt(1, user.getId());
+
+                stmt.executeUpdate();
+
+                stmt = manager.getConnection().prepareStatement(
+                    "DELETE FROM users " +
+                    "WHERE idUser=?;");
+
+                stmt.setInt(1, user.getId());
+
+                stmt.executeUpdate();
+                stmt.close();
+                manager.getConnection().commit();
+            }
+            catch (SQLException e) {
+                e.printStackTrace();
+            }   
+            loadUsers();
+        }
    }
+    
    public void updateFood(User user){
         try {
             PreparedStatement stmt = manager.getConnection().prepareStatement(
-            "UPDATE users SET " +
+                "UPDATE users SET " +
                     "prot=?, fat=?, carb=?, gi=?, FoodWeight=?, time=? " +
                     "WHERE idUser=?;");
             
@@ -276,18 +293,19 @@ public class UsersManager {
        
             stmt.close();
             manager.getConnection().commit();
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
-       loadUsers();
+        loadUsers();
    }
-   public void updateFactors(User user){
-       try {
+   
+    public void updateFactors(User user){
+        try {
             PreparedStatement stmt = manager.getConnection().prepareStatement(
-            "UPDATE users SET direct=?, " +
+                "UPDATE users SET direct=?, " +
                     "BE=?, k1=?, k2=?, k3=?, sh1=?, sh2=? " +
                     "WHERE idUser=?;");
-            
             
             stmt.setInt(1, user.isDirect()?1:0);
             stmt.setFloat(2, user.getFactors().getBEValue());
@@ -297,41 +315,42 @@ public class UsersManager {
             stmt.setFloat(6, user.getSh1().getValue());//sh1
             stmt.setFloat(7, user.getSh2().getValue());//sh2
             
-            
-            
             stmt.setInt(8, user.getId());
             
             stmt.executeUpdate();
        
             stmt.close();
             manager.getConnection().commit();
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
-       loadUsers();
+        loadUsers();
    }
-   public User getUser(int pos){
-       loadUsers();
-       if (pos<0)                       return (User) users.toArray()[0];
-       else if (pos>(users.size()-1))   return (User) users.toArray()[users.size() - 1];
+    
+    public User getUser(int pos){
+        loadUsers();
+        if (pos<0)                      return (User) users.toArray()[0];
+        else if (pos>(users.size()-1))  return (User) users.toArray()[users.size() - 1];
 
-       return (User) users.toArray()[pos];
-   }
-   public int getAmount(){
-       return users.size();
-   }
+        return (User) users.toArray()[pos];
+    }
+    
+    public int getAmount(){
+        return users.size();
+    }
 
-   public void initSugars(){
-       try{
-           Statement stmt = manager.getConnection().createStatement();
-           stmt.executeUpdate("UPDATE users SET sh1=targetSh, sh2=targetSh;");
+    public void initSugars(){
+        try{
+            Statement stmt = manager.getConnection().createStatement();
+            stmt.executeUpdate("UPDATE users SET sh1=targetSh, sh2=targetSh;");
 
-           stmt.close();
-           manager.getConnection().commit();
-       }
-       catch (SQLException e) {
-            e.printStackTrace();
-       }
-       loadUsers();
-   }
+            stmt.close();
+            manager.getConnection().commit();
+        }
+        catch (SQLException e) {
+             e.printStackTrace();
+        }
+        loadUsers();
+    }
 }

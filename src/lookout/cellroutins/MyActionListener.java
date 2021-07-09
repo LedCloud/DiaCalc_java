@@ -41,10 +41,12 @@ import javax.swing.JComponent;
 import java.awt.event.*;
 
 public class MyActionListener implements ActionListener{
-    private PositiveFloatVerifier pfv;
+    private final PositiveFloatVerifier pfv;
+    
     public MyActionListener(boolean mode){
         pfv = new PositiveFloatVerifier(mode);
     }
+    
     @Override
     public void actionPerformed(ActionEvent e){
         pfv.verify((JComponent)e.getSource());

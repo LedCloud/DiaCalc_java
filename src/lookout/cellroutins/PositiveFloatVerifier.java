@@ -47,9 +47,10 @@ import maths.Calculator;
 
 
 public class PositiveFloatVerifier extends InputVerifier {
-    private boolean calc;
+    private final boolean calc;
     private DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-    private Calculator calculator;
+    private final Calculator calculator;
+    
     public PositiveFloatVerifier(boolean calc){
         this.calc = calc;
         symbols = new DecimalFormatSymbols();
@@ -101,6 +102,4 @@ public class PositiveFloatVerifier extends InputVerifier {
   public boolean shouldYieldFocus(JComponent input) {
           return verify(input);
   }
-      
-  
 }

@@ -41,10 +41,9 @@ package diacalcj;
 import java.io.*;
 
 class LoggingOutputStream extends ByteArrayOutputStream {
-
     private final String lineSeparator;
-
     private final PrintStream olderrstr;
+
     /**
      * Constructor
      * @param logger Logger to write to

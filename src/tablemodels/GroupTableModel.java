@@ -39,7 +39,7 @@ package tablemodels;
  * @author Toporov Konstantin <www.diacalc.org>
  */
 
-import java.util.Vector;
+import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 
 import products.ProdGroup;
@@ -47,21 +47,20 @@ import manager.GroupManager;
 import lookout.settings.ProgramSettings;
 
 public class GroupTableModel extends AbstractTableModel {
- private Vector groups;
- private ProgramSettings settings;
- private GroupManager mgr;
+ private ArrayList groups;
+ private final ProgramSettings settings;
+ private final GroupManager mgr;
 
   // Модель при создании получает список групп
   public GroupTableModel(GroupManager mgr){
       this.mgr = mgr;
       settings = ProgramSettings.getInstance();
-      groups = new Vector(mgr.getGroups(settings.getIn().getUseUsageGroup()));
+      groups = new ArrayList(mgr.getGroups(settings.getIn().getUseUsageGroup()));
       
   }
   
   public void updateGroup(ProdGroup gr){
-      groups = new Vector(mgr.updateGroup(gr,settings.getIn().getUseUsageGroup()));
-      //fireTableRowsUpdated(0,groups.size()-1);
+      groups = new ArrayList(mgr.updateGroup(gr,settings.getIn().getUseUsageGroup()));
       fireTableDataChanged();
   }
   
@@ -71,7 +70,7 @@ public class GroupTableModel extends AbstractTableModel {
           gr.setSortInd(   ((ProdGroup) groups.get(groups.size()-1)).getSortInd()+1
                   );
       }
-      groups = new Vector(mgr.addGroup(gr,settings.getIn().getUseUsageGroup()));
+      groups = new ArrayList(mgr.addGroup(gr,settings.getIn().getUseUsageGroup()));
       fireTableDataChanged();
   }
 
@@ -79,7 +78,7 @@ public class GroupTableModel extends AbstractTableModel {
       if (groups.size()>0){
           int row= groups.indexOf(gr);
 
-          groups = new Vector(mgr.deleteGroup(gr,settings.getIn().getUseUsageGroup()));
+          groups = new ArrayList(mgr.deleteGroup(gr,settings.getIn().getUseUsageGroup()));
           if (row>=0) {
               this.fireTableRowsDeleted(row, row);
           }
@@ -139,7 +138,7 @@ public class GroupTableModel extends AbstractTableModel {
     return null;
   }   
   public void reloadGroups(){
-      groups = new Vector(mgr.getGroups(settings.getIn().getUseUsageGroup()));
+      groups = new ArrayList(mgr.getGroups(settings.getIn().getUseUsageGroup()));
       if (groups.size()>0)
           fireTableDataChanged();
   }    

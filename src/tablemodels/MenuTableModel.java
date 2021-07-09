@@ -29,7 +29,7 @@
  *
  * Contributor(s):
  *
- * Portions Copyrighted 2009 Toporov Konstantin.
+ * Portions Copyrighted 2009-2018 Toporov Konstantin.
  */
 
 package tablemodels;
@@ -64,17 +64,17 @@ public class MenuTableModel extends AbstractTableModel {
     public final static int GL = 64;
     
     private Vector products;
-    private ProgramSettings settings = ProgramSettings.getInstance();
+    private final ProgramSettings settings = ProgramSettings.getInstance();
    
     private Dose ds;
     private Factors factors;
     private MenuManager mgr;
-    private int table;
+    private final int table;
 
-    private String [] colNames = { "Наименование", "Вес", "Калор", "Доза",
+    private final String [] colNames = { "Наименование", "Вес", "Калор", "Доза",
                 "Б","Ж","У","ГИ","ГН"};
     private int colCount;
-    private int [] colReplace = new int[9];
+    private final int [] colReplace = new int[9];
     
     public MenuTableModel(int idUser,Factors factors,
             int table){
@@ -240,12 +240,9 @@ public class MenuTableModel extends AbstractTableModel {
     
    public ProductInMenu getProduct(int rowIndex)
    {
-    if(products!=null) {
-      if(rowIndex<products.size() && rowIndex>=0) {
-          
-        return (ProductInMenu)products.get(rowIndex);
-      }
-    }
+        if(products!=null && rowIndex<products.size() && rowIndex>=0) {
+            return (ProductInMenu)products.get(rowIndex);
+        }
      return null;
    }   
     

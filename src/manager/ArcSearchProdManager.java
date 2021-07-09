@@ -50,7 +50,7 @@ import java.sql.*;
 import maths.SearchString;
 
 public class ArcSearchProdManager {
-    private ManagementSystem manager;
+    private final ManagementSystem manager;
 
     public ArcSearchProdManager(){
         //Тут надо иницировать соединение
@@ -78,7 +78,6 @@ public class ArcSearchProdManager {
 
             Statement stmt = manager.getConnection().createStatement();
             ResultSet rs = stmt.executeQuery(query);
-
 
             while (rs.next()){
                  ProdGroup gr = new ProdGroup(rs.getInt(1),

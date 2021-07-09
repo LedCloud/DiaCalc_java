@@ -94,5 +94,4 @@ public class DPS {
         if (fs.getK3()<0.01f) return 0f;
         return (sh1.getValue()-sh2.getValue())/fs.getK3();
     }
-            
 }

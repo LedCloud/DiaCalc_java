@@ -60,6 +60,7 @@ public class Dose {
         dps = new DPS(newDps);
         NeedReCalc = true;
     }
+    
     public Dose(Dose newDose){
         prod = new ProductW( newDose.prod );
         fact = new Factors( newDose.fact );
@@ -138,5 +139,4 @@ public class Dose {
     public float getDPSDose(){
         return dps.getDPSDose();
     }
-
 }

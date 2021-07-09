@@ -50,11 +50,11 @@ import java.sql.*;
 import maths.SearchString;
 
 public class SearchProdManager {
-    private ManagementSystem manager;
+    private final ManagementSystem manager = ManagementSystem.getInstance();
     
     public SearchProdManager(){
         //Тут надо иницировать соединение
-        manager = ManagementSystem.getInstance();
+        //manager = ManagementSystem.getInstance();
     }
     
     public Collection doSearch(String string4search){
@@ -89,16 +89,22 @@ public class SearchProdManager {
             
             Statement stmt = manager.getConnection().createStatement();
             ResultSet rs = stmt.executeQuery(query);
-
             
             while (rs.next()){
-                 ProdGroup gr = new ProdGroup(rs.getInt(1),
-                         rs.getString(2),0);
-                 ProductInBase prod = new ProductInBase(rs.getString(4),
-                    rs.getFloat(5),rs.getFloat(6),rs.getFloat(7),
-                    rs.getInt(8),0,rs.getInt(3),
-                    false,gr.getId(),0);
-                 list.add(new Pair(gr,prod));
+                ProdGroup gr = new ProdGroup(rs.getInt(1),
+                                            rs.getString(2),
+                                            0);
+                ProductInBase prod = new ProductInBase( rs.getString(4),
+                                                        rs.getFloat(5),
+                                                        rs.getFloat(6),
+                                                        rs.getFloat(7),
+                                                        rs.getInt(8),
+                                                        0,
+                                                        rs.getInt(3),
+                                                        false,
+                                                        gr.getId(),
+                                                        0);
+                list.add(new Pair(gr,prod));
             }
              
             rs.close();

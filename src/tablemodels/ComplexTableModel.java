@@ -38,8 +38,8 @@ package tablemodels;
  * @author Toporov Konstantin <www.diacalc.org>
  */
 
-import lookout.settings.ProgramSettings;
-import java.util.Vector;
+import java.util.ArrayList;
+//import lookout.settings.ProgramSettings;
 import javax.swing.table.AbstractTableModel;
 
 import products.ComplexProduct;
@@ -49,18 +49,18 @@ import products.ProductInBase;
 
 public class ComplexTableModel extends AbstractTableModel {
 
-    private Vector composition;
-    private ProgramSettings settings;
-    private ComplexManager mgr;
+    private ArrayList composition;
+    //private final ProgramSettings settings;
+    private final ComplexManager mgr;
     private boolean weightEditable;
     private int Owner;
     private boolean editable=false;
-    private String[] colNames = { "Наименование","Вес", "Б", "Ж", "У","ГИ" };
+    private final String[] colNames = { "Наименование","Вес", "Б", "Ж", "У","ГИ" };
     
     public ComplexTableModel(ComplexManager mgr,int idOwner){
         this.mgr = mgr;
-        composition = new Vector(mgr.getComposition(idOwner));
-        settings = ProgramSettings.getInstance();
+        composition = new ArrayList(mgr.getComposition(idOwner));
+        //settings = ProgramSettings.getInstance();
         weightEditable = false;
         this.Owner = idOwner;
     }
@@ -74,6 +74,7 @@ public class ComplexTableModel extends AbstractTableModel {
         //no matter where the cell appears onscreen.
         return col==1&&weightEditable;
   }
+  
   @Override
   public void setValueAt(Object value, int row, int col){
       if (col==1){
@@ -84,7 +85,8 @@ public class ComplexTableModel extends AbstractTableModel {
         fireTableCellUpdated(row, col);
       }
   }
-    @Override
+  
+  @Override
   public int getRowCount()
   {
     if (composition != null) {
@@ -164,25 +166,27 @@ public class ComplexTableModel extends AbstractTableModel {
       if (composition!=null && composition.size()>0 )
             return getValueAt(0, c).getClass();
       else return null;
-  }    
+  }
+  
   public void flushProducts(int idOwner){
       Owner = idOwner;
       int sz = composition.size();
-      composition =  new Vector(mgr.flushProducts(Owner));
+      composition =  new ArrayList(mgr.flushProducts(Owner));
       fireTableRowsDeleted(0,sz-1);
 
   }
+  
   public void reloadProducts(int idOwner){
       int sz =  composition.size();
       Owner = idOwner;
-      composition = new Vector(mgr.getComposition(Owner));
+      composition = new ArrayList(mgr.getComposition(Owner));
       if (composition.size()>0) fireTableDataChanged();
       else if (sz>0) fireTableRowsDeleted(0,sz-1);
   }
   
    public void deleteProduct(ComplexProduct prod){
         if (composition.size()>0){
-            composition = new Vector(mgr.deleteProduct(prod));
+            composition = new ArrayList(mgr.deleteProduct(prod));
             //fireTableRowsDeleted(pos-1,pos-1);
             if (composition.size()>0) fireTableDataChanged();
             else fireTableRowsDeleted(0,0);
@@ -199,13 +203,14 @@ public class ComplexTableModel extends AbstractTableModel {
         }
         if (!found){
             prod.setWeight(0f);
-            composition = new Vector(mgr.addProduct((ProductW)prod,Owner));
+            composition = new ArrayList(mgr.addProduct((ProductW)prod,Owner));
             fireTableDataChanged();
         }
    }
    public boolean isEditable(){
        return editable;
    }
+   
    public void setEditable(boolean ed){
        editable = ed;
    }

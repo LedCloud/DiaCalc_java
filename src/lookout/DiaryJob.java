@@ -29,7 +29,7 @@
  *
  * Contributor(s):
  *
- * Portions Copyrighted 2009-2017 Toporov Konstantin.
+ * Portions Copyrighted 2009-2018 Toporov Konstantin.
  */
 
 package lookout;

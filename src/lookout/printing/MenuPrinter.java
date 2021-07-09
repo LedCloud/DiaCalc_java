@@ -44,7 +44,7 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.text.DecimalFormat;
-import java.util.Vector;
+import java.util.ArrayList;
 import javax.swing.JTable;
 import maths.DPS;
 import maths.Dose;
@@ -55,14 +55,14 @@ import tablemodels.MenuTableModel;
 public class MenuPrinter implements Printable{
     private MenuTableModel menu = null;
     private MenuTableModel snack = null;
-    private Vector<Vector<String>> rows = new Vector();
-    private Vector<String> row;
+    private final ArrayList<ArrayList<String>> rows = new ArrayList();
+    private ArrayList<String> row;
     private int columns = 0;
     private Rectangle [] recs;
     int cellheight;
-    private DecimalFormat df0 = new DecimalFormat("0.0");
-    private DecimalFormat df00 = new DecimalFormat("0.00");
-    private ProductW sum;
+    private final DecimalFormat df0 = new DecimalFormat("0.0");
+    private final DecimalFormat df00 = new DecimalFormat("0.00");
+    private final ProductW sum;
     
     
     public MenuPrinter(User user, JTable menuT,
@@ -75,7 +75,7 @@ public class MenuPrinter implements Printable{
             sum.plusProd(snack.getSumProd());
         }
         
-        row = new Vector();
+        row = new ArrayList();
         row.add("Меню");
         rows.add(row);
         //Делаем заголовок таблицы
@@ -83,14 +83,14 @@ public class MenuPrinter implements Printable{
         
         recs = new Rectangle[columns];
         
-        row = new Vector();
+        row = new ArrayList();
         for(int j=0;j<columns;j++){
                 row.add(menu.getPureColumnName(j));
         }
         rows.add(row);
         //заполняем таблицу
         for(int i=0;i<menu.getRowCount();i++){
-            row = new Vector();
+            row = new ArrayList();
             for(int j=0;j<columns;j++){
                 Object ob = menu.getValueAt(i, j);
                 if (ob instanceof String){
@@ -103,12 +103,13 @@ public class MenuPrinter implements Printable{
             }
             rows.add(row);
         }
+        
         if (snack!=null){
-            row = new Vector();
+            row = new ArrayList();
             row.add("Перекус");
             rows.add(row);
             for(int i=0;i<snack.getRowCount();i++){
-                row = new Vector();
+                row = new ArrayList();
                 for(int j=0;j<columns;j++){
                     Object ob = snack.getValueAt(i, j);
                     if (ob instanceof String){
@@ -122,7 +123,7 @@ public class MenuPrinter implements Printable{
                 rows.add(row);
             }
         }
-        row = new Vector();
+        row = new ArrayList();
         row.add(
                 "k1=" + df00.format(user.getFactors().getK1(user.isDirect()))+
                 " k2=" + df00.format(user.getFactors().getK2())+
@@ -130,14 +131,14 @@ public class MenuPrinter implements Printable{
                 (user.isDirect()?(" ХЕ="+df0.format(user.getFactors().getBE(user.isDirect()))):"")
                 );
         rows.add(row);
-        row = new Vector();
+        row = new ArrayList();
         row.add(
                 "СКстарт=" + df0.format(user.getSh1().getSugar(user.isMmol(), user.isPlasma())) + 
                 " СКцель=" + df0.format(user.getSh2().getSugar(user.isMmol(), user.isPlasma()))
                 );
         rows.add(row);
         Dose ds = new Dose(sum,user.getFactors(),new DPS(user.getSh1(),user.getSh2(),user.getFactors()));
-        row = new Vector();
+        row = new ArrayList();
         row.add(
                 "ДПС+БД=" + df_prec.format(ds.getDPSDose()+ds.getCarbFastDose())
                  + " МДугл+МДбел/ж=" +
@@ -146,10 +147,10 @@ public class MenuPrinter implements Printable{
                 );
         rows.add(row);
     }
+    
     @Override
     public int print(Graphics g, PageFormat pf, int page) throws
                                                         PrinterException {
-        
         /* User (0,0) is typically outside the imageable area, so we must
          * translate by the X and Y values in the PageFormat to avoid clipping
          */
@@ -232,11 +233,13 @@ public class MenuPrinter implements Printable{
         /* tell the caller that this page is part of the printed document */
         //return PAGE_EXISTS;
     }
+    
     private void step(){
         for(Rectangle r:recs){
                 r.y += cellheight;
         }
     }
+    
     private void drawCenteredCell(Graphics g,Rectangle r,Object ob,boolean drawrect){
         String st = "";
         
@@ -277,5 +280,4 @@ public class MenuPrinter implements Printable{
         g.setColor(Color.BLACK);
         g.drawString(st, x, y);
     }
-    
 }

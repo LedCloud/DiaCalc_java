@@ -55,8 +55,8 @@ public class CoefsSet {
     private int     row;
     private boolean mode;//true - возвращаем номер
                          //false - возвращаем время
-    private SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-    private DecimalFormat dcf = new DecimalFormat("0.00");
+    private final SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+    private final DecimalFormat dcf = new DecimalFormat("0.00");
 
     public CoefsSet(){
         id =0;
@@ -67,6 +67,7 @@ public class CoefsSet {
         row = 0;
         mode = true;
     }
+    
     public CoefsSet(CoefsSet in){
         id = in.id;
         k1 = in.k1;
@@ -76,6 +77,7 @@ public class CoefsSet {
         row = in.row;
         mode = in.mode;
     }
+    
     public CoefsSet(int id, float k1, float k2, float k3, Date time, int row,
             boolean mode){
         this.id = id;
@@ -90,6 +92,7 @@ public class CoefsSet {
     public void setMode(boolean mode){
         this.mode = mode;
     }
+    
     public void setPos(int row){
         this.row = row;
     }
@@ -97,24 +100,31 @@ public class CoefsSet {
     public int getId(){
         return id;
     }
+    
     public void setId(int id){
         this.id = id;
     }
+    
     public float getK1(){
         return k1;
     }
+    
     public void setK1(float k1){
         this.k1 = k1;
     }
+    
     public float getK2(){
         return k2;
     }
+    
     public void setK2(float k2){
         this.k2 = k2;
     }
+    
     public float getK3(){
         return k3;
     }
+    
     public void setK3(float k3){
         this.k3 = k3;
     }
@@ -122,6 +132,7 @@ public class CoefsSet {
     public Date getTime(){
         return time;
     }
+    
     public void setTime(Date time){
         this.time = time;
     }
@@ -129,9 +140,11 @@ public class CoefsSet {
     public int getRow(){
         return row;
     }
+    
     public void setRow(int row){
         this.row = row;
     }
+    
     @Override
     public String toString(){
         String buf ="";

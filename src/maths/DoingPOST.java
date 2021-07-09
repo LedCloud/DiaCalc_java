@@ -61,6 +61,7 @@ public class DoingPOST {
         if (!v.endsWith("/")) return v+"/";
         return v;
     }
+    
     public DoingPOST(String pathToServer, String request){
         URL                 url;
         URLConnection       urlConn;
@@ -102,18 +103,23 @@ public class DoingPOST {
         
         //answer = answer.replace("<br>", "\n");
     }
+    
     public String getAnswer(){
         return answer;
     }
+    
     public boolean isError(){
         return error;
     }
+    
     public String getErrorMessage(){
         return errorMsg;
     }
+    
     public static String addKeyValue(String key, String value){
         return addKeyValue( null, key, value );
     }
+    
     public static String addKeyValue(String query, String key, String value){
         String res;
         if (query==null){

@@ -42,13 +42,13 @@ package tablemodels;
 import javax.swing.table.AbstractTableModel;
 import java.util.*;
 import maths.Plate;
-import lookout.settings.ProgramSettings;
+//import lookout.settings.ProgramSettings;
 import manager.PlatesManager;
 
 public class PlateTableModel  extends AbstractTableModel{
-    private Vector<Plate> records;
-    private ProgramSettings settings = ProgramSettings.getInstance();
-    private PlatesManager manager;
+    private ArrayList<Plate> records;
+    //private final ProgramSettings settings = ProgramSettings.getInstance();
+    private final PlatesManager manager;
 
     public PlateTableModel(){
         manager = new PlatesManager();

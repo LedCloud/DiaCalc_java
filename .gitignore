@@ -13,3 +13,4 @@ dist/
 # игнорировать все .txt файлы в каталоге doc/
 #doc/**/*.txt
 base.*
+settings.xml

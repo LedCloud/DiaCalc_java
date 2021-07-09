@@ -51,29 +51,32 @@ public class IntVerifier extends InputVerifier {
         if (min!=null) this.min = min;
         if (max!=null) this.max = max;
     }
+    
+    @Override
     public boolean verify(JComponent input) {
-               if (input instanceof JFormattedTextField) {
-             JFormattedTextField ftf = (JFormattedTextField)input;
-             JFormattedTextField.AbstractFormatter formatter = ftf.getFormatter();
-             if (formatter != null) {
-                 String text = ftf.getText();
-                 try {
-                      int vl = ((Number)formatter.stringToValue(text)).intValue();
-                      if (min!=null)
-                        if (vl<min) ftf.setText(min.toString()); 
-                        else if (max!=null)
-                              if (vl>max) ftf.setText(max.toString());
-                      return true;
-                  } catch (ParseException pe) {
-                      return false;
-                  }
-              }
-          }
-          return true;
-         }
-      @Override
-      public boolean shouldYieldFocus(JComponent input) {
-          return verify(input);
-      }
-     
+        if (input instanceof JFormattedTextField) {
+            JFormattedTextField ftf = (JFormattedTextField)input;
+            JFormattedTextField.AbstractFormatter formatter = ftf.getFormatter();
+            if (formatter != null) {
+                String text = ftf.getText();
+                try {
+                    int vl = ((Number)formatter.stringToValue(text)).intValue();
+                    if (min!=null)
+                      if (vl<min) ftf.setText(min.toString()); 
+                      else if (max!=null)
+                            if (vl>max) ftf.setText(max.toString());
+                    
+                    return true;
+                } catch (ParseException pe) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    @Override
+    public boolean shouldYieldFocus(JComponent input) {
+        return verify(input);
+    }
 }

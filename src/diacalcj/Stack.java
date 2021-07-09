@@ -38,29 +38,33 @@ package diacalcj;
  *
  * @author Toporov Konstantin <www.diacalc.org>
  */
-import java.util.*;
+import java.util.ArrayList;
 
 public class Stack {
     private static boolean alive = true;
-    private static Vector<String> stack = new Vector();
+    private static final ArrayList<String> stack = new ArrayList();
     private static Stack instance = null;
+    
     private Stack(){
     }
+    
     public static synchronized Stack getInstance(){
         if (instance==null){
             instance = new Stack();
         }
         return instance;
     }
-    public Vector<String> getStackTrace(){
+    
+    public ArrayList<String> getStackTrace(){
         //вот тут нужно синхронизирорвать доступ к данному полю
         return stack;
     }
+    
     public static synchronized boolean isAlive(){
         return alive;
     }
+    
     public static synchronized void setAlive(boolean state){
         alive = state;
     }
-
 }

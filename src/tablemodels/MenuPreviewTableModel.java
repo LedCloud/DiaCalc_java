@@ -41,23 +41,23 @@ package tablemodels;
 
 import java.util.*;
 import javax.swing.table.AbstractTableModel;
-import lookout.settings.ProgramSettings;
+//import lookout.settings.ProgramSettings;
 import products.ProductInMenu;
 
 public class MenuPreviewTableModel extends AbstractTableModel{
-    private ProgramSettings settings = ProgramSettings.getInstance();
-    private Vector<ProductInMenu> prods;
-    private boolean mode;
-    private String[] colNames = { "Наименование", "Вес"};
+    //private final ProgramSettings settings = ProgramSettings.getInstance();
+    private ArrayList<ProductInMenu> prods;
+    private final boolean mode;
+    private final String[] colNames = { "Наименование", "Вес"};
 
     public MenuPreviewTableModel(boolean mode){
 
-        prods = new Vector();
+        prods = new ArrayList();
         this.mode = mode;
 
     }
     public void setProducts(Collection<ProductInMenu> products){
-        prods = new Vector(products);
+        prods = new ArrayList(products);
         this.fireTableDataChanged();
     }
 

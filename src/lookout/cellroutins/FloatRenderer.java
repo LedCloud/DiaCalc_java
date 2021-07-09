@@ -39,7 +39,7 @@ package lookout.cellroutins;
  * @author Toporov Konstantin <www.diacalc.org>
  */
 
-import lookout.settings.ProgramSettings;
+//import lookout.settings.ProgramSettings;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import java.awt.Component;
@@ -57,11 +57,10 @@ import java.text.DecimalFormat;
 
 
 public class FloatRenderer extends DefaultTableCellRenderer{
-   
-    private JFormattedTextField fld;
+    private final JFormattedTextField fld;
     private Border selectedBorder=null;
     private Border unselectedBorder=null;
-    private Border emptyBorder = BorderFactory.createEmptyBorder();
+    private final Border emptyBorder = BorderFactory.createEmptyBorder();
     
     public FloatRenderer(String mask) {
         super(); 
@@ -98,9 +97,8 @@ public class FloatRenderer extends DefaultTableCellRenderer{
         else { //Не выбрано и нет фокуса
             fld.setBackground(table.getBackground());
             fld.setBorder(emptyBorder);
-            }
+        }
  
-     return fld;
+        return fld;
     }
-
 }

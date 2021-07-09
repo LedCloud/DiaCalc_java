@@ -64,8 +64,7 @@ public class ErrorReport extends JFrame{
                 "Ниже находится описание ошибки, которое может помочь разобраться<br>" +
                 "с проблемой, для разработчика эта информация очень важна</html>");
         lbl.setHorizontalAlignment(SwingConstants.CENTER);
-        add(lbl,
-                BorderLayout.NORTH);
+        add(lbl, BorderLayout.NORTH);
 
         JButton btnEmail = new JButton("Отправить отчет");
         btnEmail.addActionListener(new ActionListener(){
@@ -79,9 +78,9 @@ public class ErrorReport extends JFrame{
                         text.copy();
                         try {
                             uri = new URI("mailto",
-                     EMAIL_ADDR +"?SUBJECT=Error in "+ver+
-                     "&BODY=Опишите причину появления ошибки, а так же\n" +
-                     "Нажмите Ctrl+V для вставки в письмо лога ошибок\n\n",
+                    EMAIL_ADDR +"?SUBJECT=Error in "+ver+
+                    "&BODY=Опишите причину появления ошибки, а так же\n" +
+                    "Нажмите Ctrl+V для вставки в письмо лога ошибок\n\n",
                             null);
                             desktop.mail(uri);
                         }catch(Exception ex){
@@ -138,7 +137,9 @@ public class ErrorReport extends JFrame{
                 }
             }
         });
-    }//что бы закрыть запускаем тред, который смотрит за стеком, как только
+    }
+    
+    //что бы закрыть запускаем тред, который смотрит за стеком, как только
     //стек исчезает - убиваем данное окно
     public void runThread(){
         Thread t = new Thread(){
@@ -162,6 +163,7 @@ public class ErrorReport extends JFrame{
         };
         t.start();
     }
+    
     public void stopThread(){
         flag = false;
     }

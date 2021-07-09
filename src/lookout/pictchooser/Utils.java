@@ -44,10 +44,10 @@ import javax.swing.ImageIcon;
 
 /* Utils.java is used by FileChooserDemo2.java. */
 public class Utils {
-    public final static String jpeg = "jpeg";
-    public final static String jpg = "jpg";
-    public final static String gif = "gif";
-    public final static String png = "png";
+    public final static String JPEG = "jpeg";
+    public final static String JPG = "jpg";
+    public final static String GIF = "gif";
+    public final static String PNG = "png";
 
     /*
      * Get the extension of a file.

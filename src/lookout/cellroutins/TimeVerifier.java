@@ -45,22 +45,23 @@ import java.text.ParseException;
 public class TimeVerifier extends InputVerifier {
     @Override
     public boolean verify(JComponent input) {
-         if (input instanceof JFormattedTextField) {
-             JFormattedTextField ftf = (JFormattedTextField)input;
-             String st = ftf.getText();
-             SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-             format.setLenient(false);
-             try{
-                format.parse(st);
-             } catch (ParseException ex){
-                return false;
-             }
+        if (input instanceof JFormattedTextField) {
+            JFormattedTextField ftf = (JFormattedTextField)input;
+            String st = ftf.getText();
+            SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+            format.setLenient(false);
+            try{
+               format.parse(st);
+            } catch (ParseException ex){
+               return false;
+            }
 
-          }
-          return true;
-      }
-     @Override
-     public boolean shouldYieldFocus(JComponent input) {
-          return verify(input);
-      }
+        }
+        return true;
+    }
+    
+    @Override
+    public boolean shouldYieldFocus(JComponent input) {
+        return verify(input);
+    }
 }

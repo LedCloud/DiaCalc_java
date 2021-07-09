@@ -40,14 +40,11 @@ package lookout.cellroutins;
 
 
 import javax.swing.*;
-import lookout.settings.ProgramSettings;
+//import lookout.settings.ProgramSettings;
 
 
 public class StringEditor extends DefaultCellEditor{
-
     protected JTextField fld;
-    
-    
 
     public StringEditor(final JTextField tf){
         super(tf);
@@ -70,10 +67,5 @@ public class StringEditor extends DefaultCellEditor{
                 return tf.getText();
             }
         };
-
-
     }
-
-    
-
  }

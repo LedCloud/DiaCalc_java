@@ -54,8 +54,8 @@ public class BasePrinter  implements Printable{
     public final static int BE = 2;
     public final static int CALOR = 3;
     
-    private Vector<Vector<String>> rows = new Vector();
-    private Vector<String> row = new Vector();
+    private ArrayList<ArrayList<String>> rows = new ArrayList();
+    private ArrayList<String> row = new ArrayList();
     private User user;
     Rectangle [] recs;
     int cellheight;
@@ -70,17 +70,17 @@ public class BasePrinter  implements Printable{
     private int gr;
     private int gr10;
     
-    public BasePrinter(int mode,Vector<ProdGroup> groups, 
-            Vector<ProductInBase> prods,User user){
+    public BasePrinter(int mode,ArrayList<ProdGroup> groups, 
+            ArrayList<ProductInBase> prods,User user){
         this.user = user;
         this.mode = mode;
         for(ProdGroup group:groups){
-            row = new Vector();
+            row = new ArrayList();
             row.add(group.getName());
             rows.add(row);
             for(ProductInBase prod:prods){
                 if (group.getId()==prod.getOwner()){
-                    row = new Vector();
+                    row = new ArrayList();
                     row.add(prod.getName());
                     row.add(df0.format(prod.getProt()));
                     row.add(df0.format(prod.getFat()));
@@ -276,6 +276,7 @@ public class BasePrinter  implements Printable{
         }
         return res;
     }
+    
     private void drawCenteredCell(Graphics g,Rectangle r,Object ob,boolean drawrect){
         String st = "";
         

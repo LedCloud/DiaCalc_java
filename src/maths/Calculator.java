@@ -48,11 +48,12 @@ public class Calculator {
     
     public Calculator(){
     }
-public String Calc(String textIn, 
-              JFormattedTextField.AbstractFormatter formatter){
-          String res = textIn;
-          textIn = textIn.trim();
-          if (textIn.length()>1){
+    
+    public String Calc(String textIn, 
+                  JFormattedTextField.AbstractFormatter formatter){
+        String res = textIn;
+        textIn = textIn.trim();
+        if (textIn.length()>1){
             if (checkCorrect(textIn)){
                 textIn = checkCharOneTime(textIn,decimalSeparator);
                 textIn = checkCharOneTime(textIn,'+');
@@ -73,7 +74,7 @@ public String Calc(String textIn,
                             vl = ((Number)formatter.stringToValue(buf)).floatValue();
                         } catch (ParseException pe) {}
                         //vl = Float.parseFloat(buf);
-                        
+
                         sum = sum + sign *  vl;
                         buf = "0";
                         switch (textIn.charAt(i))
@@ -96,48 +97,50 @@ public String Calc(String textIn,
                 try{
                     return formatter.valueToString(sum);
                 } catch (ParseException pe) {}
-                
+
             }
-          }
-          return res;//если не получается обработка, то возвращаем то, что взяли
-  }
-  /**
-   * Проверяем, что символ ch встречается только один раз,
-   * если не так, то сокращаем его до одного раза
-   * @param InStr строка для проверки
-   * @param ch символ
-   * @return возвращаем обработанную строку
-   */    
-  public String checkCharOneTime(String InStr, char ch)
-  {
+        }
+        return res;//если не получается обработка, то возвращаем то, что взяли
+    }
+    
+    /**
+     * Проверяем, что символ ch встречается только один раз,
+     * если не так, то сокращаем его до одного раза
+     * @param InStr строка для проверки
+     * @param ch символ
+     * @return возвращаем обработанную строку
+     */    
+    public String checkCharOneTime(String InStr, char ch)
+    {
         if (InStr.length()==0) return "0";
         boolean conj = false;
         int i=0;
         StringBuilder stBl = new StringBuilder(InStr);
         while (i<stBl.length() )
         { 
-                if (stBl.charAt(i)==ch){
-                  if (conj){ 
-                      stBl = stBl.deleteCharAt(i); 
-                      i--; 
-                  }
-                  else conj = true;
-                }else{ 
-                    conj=false;
-                }
-                i++;
+            if (stBl.charAt(i)==ch){
+              if (conj){ 
+                  stBl = stBl.deleteCharAt(i); 
+                  i--; 
+              }
+              else conj = true;
+            }else{ 
+                conj=false;
+            }
+            i++;
         }
         if ((stBl.length()==1)&&(conj)) stBl = new StringBuilder("0");
         return stBl.toString();
-  }
-  /**
-   * Проверяем, что входная строка содержит только цифры
-   * знаки плюс, минус или разделитель запятой
-   * @param StrToCheck строка для проверки
-   * @return true норм, false не подходит
-   */
-  public boolean checkCorrect(String StrToCheck )
-  {
+    }
+    
+    /**
+     * Проверяем, что входная строка содержит только цифры
+     * знаки плюс, минус или разделитель запятой
+     * @param StrToCheck строка для проверки
+     * @return true норм, false не подходит
+     */
+    public boolean checkCorrect(String StrToCheck )
+    {
         int i=0; 
         StringBuilder stBl = new StringBuilder(StrToCheck);
         while (i<stBl.length() && stBl.length()>0)
@@ -149,5 +152,5 @@ public String Calc(String textIn,
                 else stBl = stBl.deleteCharAt(i);
         }
         return stBl.length() != 0;
-  }
+    }
 }

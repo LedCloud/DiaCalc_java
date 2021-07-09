@@ -204,10 +204,10 @@ public class User {
         this.mmol = mmol;
     }
     
-    
     public boolean isPlasma(){
         return plasma;
     }
+    
     public void setPlasma(boolean plasma){
         this.plasma = plasma;
     }

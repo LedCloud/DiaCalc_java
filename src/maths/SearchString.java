@@ -204,19 +204,23 @@ public class SearchString {
         
         return res;
     }
+    
     /**
      * Возвращаем строку с первой заглавной буквой.
      * @param st входная строка
      */
     static private String getCapFirst(String st){
-      if (st!=null && st.length()>0){
-        String c = new String("" + st.charAt(0)).toUpperCase();
-        if (st.length()>1){
-            return c + st.substring(1);
+        if (st!=null && st.length()>0){
+            String c = ("" + st.charAt(0)).toUpperCase();
+            if (st.length()>1){
+                return c + st.substring(1);
+            }
+            else return c;
         }
-        else return c;
-      } return null;
+        
+        return null;
     }
+    
     /**
      * Возвращаем СК в формате БД
      * @param st ск из поиска в формате пользователя
@@ -230,5 +234,4 @@ public class SearchString {
         }
         return "";
     }
-    
 }

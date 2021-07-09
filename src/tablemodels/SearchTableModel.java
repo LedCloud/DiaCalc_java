@@ -39,8 +39,8 @@ package tablemodels;
  * @author Toporov Konstantin <www.diacalc.org>
  */
 
+import java.util.ArrayList;
 import lookout.settings.ProgramSettings;
-import java.util.Vector;
 import javax.swing.table.AbstractTableModel;
 
 
@@ -51,13 +51,13 @@ import products.ProductInBase;
 
 public class SearchTableModel  extends AbstractTableModel {
     private final SearchProdManager mgr;
-    private Vector searchResults;
+    private ArrayList searchResults;
     private final ProgramSettings settings;
     
     public SearchTableModel(){
         settings = ProgramSettings.getInstance();
         mgr = new SearchProdManager();
-        searchResults = new Vector(mgr.doSearch(""));
+        searchResults = new ArrayList(mgr.doSearch(""));
     }
     
     @Override
@@ -122,7 +122,7 @@ public class SearchTableModel  extends AbstractTableModel {
   }
   public void doSearch(String st){
       int sz = searchResults.size();
-      searchResults = new Vector(mgr.doSearch(st));
+      searchResults = new ArrayList(mgr.doSearch(st));
       if (searchResults.size()>0) fireTableDataChanged();
       else if (sz>0) fireTableRowsDeleted(0,sz-1);
   }

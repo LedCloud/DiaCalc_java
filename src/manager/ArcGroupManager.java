@@ -50,7 +50,7 @@ import java.sql.PreparedStatement;
 import products.ProdGroup;
 
 public class ArcGroupManager {
-    private ManagementSystem manager;
+    private final ManagementSystem manager;
     private int lastInsertedId = -1;
 
     public ArcGroupManager(){
@@ -77,8 +77,9 @@ public class ArcGroupManager {
         manager.getConnection().commit();
 
         } catch (SQLException e) {
-        e.printStackTrace();
+            e.printStackTrace();
         }
+        
         return groups;
     }
 
@@ -93,8 +94,6 @@ public class ArcGroupManager {
 
             stmt.executeUpdate();
 
-
-
             Statement stmt2 = manager.getConnection().createStatement();
             ResultSet rsl = stmt2.executeQuery("SELECT last_insert_rowid() FROM arcgroups;");
             lastInsertedId = -1;
@@ -107,6 +106,7 @@ public class ArcGroupManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+         
         return getGroups();
     }
 
@@ -133,25 +133,24 @@ public class ArcGroupManager {
             e.printStackTrace();
         }
 
-
         return getGroups();
     }
 
     public Collection updateGroup(ProdGroup gr){
         try {
-        PreparedStatement
-           stmt = manager.getConnection().prepareStatement(
-        "UPDATE arcgroups SET Name=?, mainInd=? WHERE idGroup=?;");
+            PreparedStatement
+               stmt = manager.getConnection().prepareStatement(
+            "UPDATE arcgroups SET Name=?, mainInd=? WHERE idGroup=?;");
 
-        stmt.setString(1, gr.getName());
-        stmt.setInt(2, gr.getSortInd());
-        stmt.setInt(3, gr.getId());
+            stmt.setString(1, gr.getName());
+            stmt.setInt(2, gr.getSortInd());
+            stmt.setInt(3, gr.getId());
 
 
-        stmt.execute();
+            stmt.execute();
 
-        stmt.close();
-        manager.getConnection().commit();
+            stmt.close();
+            manager.getConnection().commit();
 
         } catch (SQLException e) {
             e.printStackTrace();

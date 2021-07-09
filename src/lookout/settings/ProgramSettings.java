@@ -44,8 +44,10 @@ import java.io.*;
 import javax.swing.JOptionPane;
 
 public class ProgramSettings{
-    private static String SET_FILE_NAME = System.getProperty("user.dir")+System.getProperty("file.separator")+"settings.xml";
-    private static String SET_FILE_NAME_DAT = System.getProperty("user.dir")+System.getProperty("file.separator")+"settings.dat";
+    private static final String SET_FILE_NAME = System.getProperty("user.dir") + 
+            System.getProperty("file.separator") + "settings.xml";
+    private static final String SET_FILE_NAME_DAT = System.getProperty("user.dir") + 
+            System.getProperty("file.separator")+"settings.dat";
     private static ProgramSettings instance = null;
 
     private static SettingsData data;
@@ -53,42 +55,42 @@ public class ProgramSettings{
     
     private ProgramSettings(){
         if (new File(SET_FILE_NAME_DAT).exists()){
-                try {
-                    FileInputStream fin = new FileInputStream(SET_FILE_NAME_DAT);
-                    ObjectInputStream ois = new ObjectInputStream(fin);
-                    data
-                        = (SettingsData) ois.readObject();
+            try {
+                FileInputStream fin = new FileInputStream(SET_FILE_NAME_DAT);
+                ObjectInputStream ois = new ObjectInputStream(fin);
+                data = (SettingsData) ois.readObject();
 
-                    ois.close();
-                }
-                catch (Exception e) {
-                    data = new SettingsData();
-                    JOptionPane.showMessageDialog(null,
-                            "Не найден подходящий файл settings.dat\n" +
-                            "Будут использованы настройки по умолчанию\n" +
-                            "Будет выбран первый по списку пользователь\n" +
-                            "Это не ошибка и никакой потери данных не произойдет!",
-                            "Обновление",
-                            JOptionPane.INFORMATION_MESSAGE);
-                }
-                //Все прошло нормально, удаляем settings.dat
-                new File(SET_FILE_NAME_DAT).delete();
+                ois.close();
             }
-            else{
-                if (new File(SET_FILE_NAME).exists()){
-                    try{
-                        XMLDecoder d = new XMLDecoder(
-                          new BufferedInputStream(
-                              new FileInputStream(SET_FILE_NAME)));
-                        data  = (SettingsData)d.readObject();
-                        d.close();
-                    }catch(Exception exc){
-                        data = new SettingsData();
-                    }
-                }else{
+            catch (Exception e) {
+                data = new SettingsData();
+                JOptionPane.showMessageDialog(null,
+                        "Не найден подходящий файл settings.dat\n" +
+                        "Будут использованы настройки по умолчанию\n" +
+                        "Будет выбран первый по списку пользователь\n" +
+                        "Это не ошибка и никакой потери данных не произойдет!",
+                        "Обновление",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+            //Все прошло нормально, удаляем settings.dat
+            new File(SET_FILE_NAME_DAT).delete();
+        }
+        else{
+            if (new File(SET_FILE_NAME).exists()){
+                try{
+                    XMLDecoder d = new XMLDecoder(
+                      new BufferedInputStream(
+                          new FileInputStream(SET_FILE_NAME)));
+                    data  = (SettingsData)d.readObject();
+                    d.close();
+                }
+                catch(Exception exc){
                     data = new SettingsData();
                 }
+            }else{
+                data = new SettingsData();
             }
+        }
     }
     
     public SettingsData getIn(){
@@ -102,21 +104,18 @@ public class ProgramSettings{
         return instance;
     }
 
-    
-    
-    
     public void store(){
        // serialize the Queue
-       try{
+        try{
             XMLEncoder e = new XMLEncoder(
                           new BufferedOutputStream(
                               new FileOutputStream(SET_FILE_NAME)));
             e.writeObject(data);
             e.close();
-        }catch (FileNotFoundException exc){
+        }
+        catch (FileNotFoundException exc){
             exc.printStackTrace();
         }
-    
     }
 }
 

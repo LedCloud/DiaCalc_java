@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<java version="1.8.0_131" class="java.beans.XMLDecoder">
+<java version="11.0.9.1" class="java.beans.XMLDecoder">
  <object class="lookout.settings.SettingsData" id="SettingsData0">
   <void property="carbRatio">
    <boolean>true</boolean>
@@ -16,7 +16,7 @@
     <string>y</string>
     <void method="set">
      <object idref="Rectangle0"/>
-     <int>225</int>
+     <int>281</int>
     </void>
    </void>
    <void class="java.awt.Rectangle" method="getField">
@@ -57,7 +57,7 @@
     <string>x</string>
     <void method="set">
      <object idref="Rectangle1"/>
-     <int>511</int>
+     <int>65</int>
     </void>
    </void>
    <void class="java.awt.Rectangle" method="getField">
@@ -83,31 +83,28 @@
    </void>
   </void>
   <void property="menuNameWidth">
-   <int>165</int>
+   <int>163</int>
   </void>
   <void property="menuRest">
-   <int>75</int>
+   <int>82</int>
   </void>
   <void property="menuSize">
-   <int>391</int>
+   <int>400</int>
   </void>
   <void property="menuWeightWidth">
-   <int>71</int>
+   <int>69</int>
   </void>
   <void property="prodName">
-   <int>229</int>
+   <int>212</int>
   </void>
   <void property="prodRest">
-   <int>74</int>
+   <int>78</int>
   </void>
   <void property="snackSize">
    <int>180</int>
   </void>
-  <void property="useSnack">
-   <boolean>true</boolean>
-  </void>
-  <void property="user">
-   <int>1</int>
+  <void property="useUsageGroup">
+   <int>0</int>
   </void>
  </object>
 </java>

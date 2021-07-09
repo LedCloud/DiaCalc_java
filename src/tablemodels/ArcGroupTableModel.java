@@ -39,122 +39,121 @@ package tablemodels;
  * @author Toporov Konstantin <www.diacalc.org>
  */
 
-import java.util.Vector;
+import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 
 import products.ProdGroup;
 import manager.ArcGroupManager;
-import lookout.settings.ProgramSettings;
+//import lookout.settings.ProgramSettings;
 
 public class ArcGroupTableModel extends AbstractTableModel {
- private Vector<ProdGroup> groups;
- private ArcGroupManager mgr = new ArcGroupManager();
- private ProgramSettings settings = ProgramSettings.getInstance();
+    private ArrayList<ProdGroup> groups;
+    private final ArcGroupManager mgr = new ArcGroupManager();
+    //private final ProgramSettings settings = ProgramSettings.getInstance();
 
-  // Модель при создании получает список групп
-  public ArcGroupTableModel(){
-      groups = new Vector(mgr.getGroups());
-  }
-
-  public void updateGroup(ProdGroup gr){
-      groups = new Vector(mgr.updateGroup(gr));
-      //fireTableRowsUpdated(0,groups.size()-1);
-      fireTableDataChanged();
-  }
-
-  public void addGroup(ProdGroup gr){
-      if ( (groups.size()>0)&&(gr.getSortInd()==0) ){
-
-          gr.setSortInd(   ((ProdGroup) groups.get(groups.size()-1)).getSortInd()+1
-                  );
-      }
-      groups = new Vector(mgr.addGroup(gr));
-      //fireTableRowsUpdated(0,groups.size()-1);
-      fireTableDataChanged();
-  }
-
-  public void deleteGroup(ProdGroup gr){
-      if (groups.size()>0){
-          int row= groups.indexOf(gr);
-
-          groups = new Vector(mgr.deleteGroup(gr));
-          if (row>=0) {
-              this.fireTableRowsDeleted(row, row);
-          }
-          this.fireTableDataChanged();
-      }
-
-  }
-
-  // Количество строк равно числу записей
-  @Override
-  public int getRowCount()
-  {
-
-    if (groups != null) {
-      return groups.size();
+    // Модель при создании получает список групп
+    public ArcGroupTableModel(){
+        groups = new ArrayList(mgr.getGroups());
     }
-    return 0;
-  }
 
-  // Количество столбцов - 4. Фамилия, Имя, Отчество, Дата рождения
-  @Override
-  public int getColumnCount()
-  {
-    return 1;
-  }
-
-  // Вернем наименование колонки
-  @Override
-  public String getColumnName(int column)
-  {
-     return "Наименование";
-  }
-
-  // Возвращаем данные для определенной строки и столбца
-  @Override
-  public Object getValueAt(int rowIndex, int columnIndex){
-    if ( groups != null && groups.size()>0
-            && rowIndex<groups.size() && rowIndex>=0 ){
-      
-      ProdGroup gr = (ProdGroup) groups.get(rowIndex);
-
-      switch (columnIndex) {
-      case 0:
-        return gr.getName();
-      }
+    public void updateGroup(ProdGroup gr){
+        groups = new ArrayList(mgr.updateGroup(gr));
+        //fireTableRowsUpdated(0,groups.size()-1);
+        fireTableDataChanged();
     }
-    return null;
 
-  }
+    public void addGroup(ProdGroup gr){
+        if ( (groups.size()>0)&&(gr.getSortInd()==0) ){
 
-
-  public ProdGroup getGroup(int rowIndex)
-  {
-    if(groups!=null) {
-      if(rowIndex<groups.size() && rowIndex>=0) {
-        return (ProdGroup)groups.get(rowIndex);
-      }
+            gr.setSortInd(   ((ProdGroup) groups.get(groups.size()-1)).getSortInd()+1
+                    );
+        }
+        groups = new ArrayList(mgr.addGroup(gr));
+        //fireTableRowsUpdated(0,groups.size()-1);
+        fireTableDataChanged();
     }
-    return null;
-  }
-  public void reloadGroups(){
-      groups = new Vector(mgr.getGroups());
-      if (groups.size()>0)
-          fireTableDataChanged();
-  }
-  public int findRow(int id){
-      int row = -1;
-      if (groups.size()>0){
-         Object [] pr = groups.toArray();
-         for (int i=0;i<groups.size();i++){
-             if ( ((ProdGroup)pr[i]).getId()==id ){
-                 row = i;
-                 break;
-             }
-         }
-      }
-      return row;
-  }
 
+    public void deleteGroup(ProdGroup gr){
+        if (groups.size()>0){
+            int row= groups.indexOf(gr);
+
+            groups = new ArrayList(mgr.deleteGroup(gr));
+            if (row>=0) {
+                this.fireTableRowsDeleted(row, row);
+            }
+            this.fireTableDataChanged();
+        }
+    }
+
+    // Количество строк равно числу записей
+    @Override
+    public int getRowCount()
+    {
+
+      if (groups != null) {
+        return groups.size();
+      }
+      return 0;
+    }
+
+    // Количество столбцов - 4. Фамилия, Имя, Отчество, Дата рождения
+    @Override
+    public int getColumnCount()
+    {
+      return 1;
+    }
+
+    // Вернем наименование колонки
+    @Override
+    public String getColumnName(int column)
+    {
+       return "Наименование";
+    }
+
+    // Возвращаем данные для определенной строки и столбца
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex){
+      if ( groups != null && groups.size()>0
+              && rowIndex<groups.size() && rowIndex>=0 ){
+
+        ProdGroup gr = (ProdGroup) groups.get(rowIndex);
+
+        switch (columnIndex) {
+        case 0:
+          return gr.getName();
+        }
+      }
+      return null;
+    }
+
+
+    public ProdGroup getGroup(int rowIndex)
+    {
+      if(groups!=null) {
+        if(rowIndex<groups.size() && rowIndex>=0) {
+          return (ProdGroup)groups.get(rowIndex);
+        }
+      }
+      return null;
+    }
+    
+    public void reloadGroups(){
+        groups = new ArrayList(mgr.getGroups());
+        if (groups.size()>0)
+            fireTableDataChanged();
+    }
+    
+    public int findRow(int id){
+        int row = -1;
+        if (groups.size()>0){
+           Object [] pr = groups.toArray();
+           for (int i=0;i<groups.size();i++){
+               if ( ((ProdGroup)pr[i]).getId()==id ){
+                   row = i;
+                   break;
+               }
+           }
+        }
+        return row;
+    }
 }
